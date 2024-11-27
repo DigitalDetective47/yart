@@ -3,6 +3,8 @@
 --- MOD_ID: YART
 --- MOD_AUTHOR: [DigitalDetective47]
 --- MOD_DESCRIPTION: A Balatro mod that adds reversed tarot cards to the game
+--- DISPLAY_NAME: YART
+--- BADGE_COLOR: A782D1
 --- PREFIX: yart
 
 SMODS.Atlas({
