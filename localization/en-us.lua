@@ -89,16 +89,25 @@ return {
             c_yart_rstar = {
                 name = "ratS ehT",
                 text = {
+                    "Converts all held",
+                    "{C:diamonds}Diamond{} cards to",
+                    "{C:attention}Gold Cards{}",
                 }
             },
             c_yart_rmoon = {
                 name = "nooM ehT",
                 text = {
+                    "Converts all held",
+                    "{C:clubs}Club{} cards to",
+                    "{C:attention}Mult Cards{}",
                 }
             },
             c_yart_rsun = {
                 name = "nuS ehT",
                 text = {
+                    "Converts all held",
+                    "{C:hearts}Heart{} cards to",
+                    "{C:attention}Glass Cards{}",
                 }
             },
             c_yart_rjudgement = {
@@ -109,6 +118,9 @@ return {
             c_yart_rworld = {
                 name = "dlroW ehT",
                 text = {
+                    "Converts all held",
+                    "{C:spades}Spade{} cards to",
+                    "{C:attention}Bonus Cards{}",
                 }
             },
         }
