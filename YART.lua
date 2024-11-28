@@ -3,6 +3,7 @@
 --- MOD_ID: YART
 --- MOD_AUTHOR: [DigitalDetective47]
 --- MOD_DESCRIPTION: A Balatro mod that adds reversed tarot cards to the game
+--- CONFLICTS: [incantation]
 --- DISPLAY_NAME: YART
 --- BADGE_COLOR: A782D1
 --- PREFIX: yart
@@ -19,6 +20,56 @@ SMODS.Atlas({
     path = "tarot.png",
     px = 71,
     py = 95,
+})
+SMODS.Consumable({
+    key = "rfool",
+    set = "Tarot",
+    pos = { x = 0, y = 0 },
+    atlas = "rtarots",
+    loc_vars = function(self, info_queue, center)
+        local fool_c = G.GAME.yart_last_other and G.P_CENTERS[G.GAME.yart_last_other] or nil
+        local yart_last_other = fool_c and localize { type = 'name_text', key = fool_c.key, set = fool_c.set } or
+            localize('k_none')
+        local colour = (not fool_c) and G.C.RED or G.C.GREEN
+        main_end = {
+            {
+                n = G.UIT.C,
+                config = { align = "bm", padding = 0.02 },
+                nodes = {
+                    {
+                        n = G.UIT.C,
+                        config = { align = "m", colour = colour, r = 0.05, padding = 0.05 },
+                        nodes = {
+                            { n = G.UIT.T, config = { text = ' ' .. yart_last_other .. ' ', colour = G.C.UI.TEXT_LIGHT, scale = 0.3, shadow = true } },
+                        }
+                    }
+                }
+            }
+        }
+        if not (not fool_c) then
+            info_queue[#info_queue + 1] = fool_c
+        end
+        return { main_end = main_end }
+    end,
+    can_use = function(self, card)
+        return (#G.consumeables.cards < G.consumeables.config.card_limit or self.area == G.consumeables)
+            and G.GAME.yart_last_other
+    end,
+    use = function(self, card, area, copier)
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.4,
+            func = function()
+                play_sound('timpani')
+                local card = create_card(nil, G.consumeables, nil, nil, nil, nil, G.GAME.yart_last_other)
+                card:add_to_deck()
+                G.consumeables:emplace(card)
+                used_tarot:juice_up(0.3, 0.5)
+                return true
+            end
+        }))
+        delay(0.6)
+    end,
 })
 SMODS.Consumable({
     key = "rwheel_of_fortune",

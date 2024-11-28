@@ -4,6 +4,9 @@ return {
             c_yart_rfool = {
                 name = "looF ehT",
                 text = {
+                    "Creates the last consumable",
+                    "used during this run that is",
+                    "not a {C:tarot}Tarot{} or {C:planet}Planet{} card",
                 }
             },
             c_yart_rmagician = {
