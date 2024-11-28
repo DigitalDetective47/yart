@@ -54,6 +54,10 @@ return {
             c_yart_rwheel_of_fortune = {
                 name = "enutroF fo leehW ehT",
                 text = {
+                    "{C:green}#1# in #2#{} chance to add {C:dark_edition}Negative{}",
+                    "to a random {C:attention}Joker",
+                    "Otherwise, destroy a",
+                    "random {C:attention}Joker",
                 }
             },
             c_yart_rstrength = {

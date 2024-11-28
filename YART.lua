@@ -21,6 +21,63 @@ SMODS.Atlas({
     py = 95,
 })
 SMODS.Consumable({
+    key = "rwheel_of_fortune",
+    set = "Tarot",
+    pos = { x = 5, y = 1 },
+    atlas = "rtarots",
+    config = { chance = 4 },
+    loc_vars = function(self, info_queue, center)
+        table.insert(info_queue, G.P_CENTERS.e_negative)
+        return { vars = { G.GAME.probabilities.normal, self.config.chance } }
+    end,
+    can_use = function(self, card)
+        for k, v in pairs(G.jokers.cards) do
+            if v.ability.set == 'Joker' and (not v.edition) then
+                return true
+            end
+        end
+    end,
+    use = function(self, card, area, copier)
+        if pseudorandom('rwheel_of_fortune') < G.GAME.probabilities.normal / self.config.chance then
+            local pool = {}
+            for k, v in pairs(G.jokers.cards) do
+                if v.ability.set == 'Joker' and (not v.edition) then
+                    table.insert(pool, v)
+                end
+            end
+            local selected = pseudorandom_element(pool, pseudoseed("rwheel_of_fortune"))
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.4,
+                func = function()
+                    selected:set_edition("e_negative")
+                    card:juice_up(0.3, 0.5)
+                    return true
+                end
+            }))
+        else
+            local pool = {}
+            for k, v in pairs(G.jokers.cards) do
+                if v.ability.set == 'Joker' and (not v.ability.eternal) then
+                    table.insert(pool, v)
+                end
+            end
+            if #pool ~= 0 then
+                local selected = pseudorandom_element(pool, pseudoseed("rwheel_of_fortune"))
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'after',
+                    delay = 0.4,
+                    func = function()
+                        selected:start_dissolve()
+                        card:juice_up(0.3, 0.5)
+                        return true
+                    end
+                }))
+            end
+        end
+    end,
+})
+SMODS.Consumable({
     key = "rstar",
     set = "Tarot",
     pos = { x = 1, y = 3 },
