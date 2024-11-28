@@ -129,6 +129,46 @@ SMODS.Consumable({
     end,
 })
 SMODS.Consumable({
+    key = "rtemperance",
+    set = "Tarot",
+    pos = { x = 3, y = 2 },
+    atlas = "rtarots",
+    config = { multiplier = 2, maximum = 50 },
+    loc_vars = function(self, info_queue, center)
+        local value = 0
+        if G.consumeables then
+            for k, v in pairs(G.consumeables.cards) do
+                if v ~= self then
+                    value = value + v.sell_cost
+                end
+            end
+        end
+        return { vars = { (self.config.multiplier == 2) and "double" or ("X" .. self.config.multiplier), self.config.maximum, value } }
+    end,
+    can_use = function(self, card)
+        return #G.consumeables.cards >= 1
+    end,
+    use = function(self, card, area, copier)
+        local value = 0
+        for k, v in pairs(G.consumeables.cards) do
+            if v ~= self then
+                value = value + v.sell_cost
+            end
+        end
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.4,
+            func = function()
+                play_sound('timpani')
+                used_tarot:juice_up(0.3, 0.5)
+                ease_dollars(value, true)
+                return true
+            end
+        }))
+        delay(0.6)
+    end,
+})
+SMODS.Consumable({
     key = "rstar",
     set = "Tarot",
     pos = { x = 1, y = 3 },
