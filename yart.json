@@ -1,0 +1,20 @@
+{
+    "id": "YART",
+    "name": "Yet Another Reversed Tarot mod",
+    "author": [
+        "DigitalDetective47"
+    ],
+    "description": "A Balatro mod that adds reversed tarot cards to the game",
+    "prefix": "yart",
+    "main_file": "YART.lua",
+    "badge_colour": "A782D1",
+    "display_name": "YART",
+    "version": "0.1.0",
+    "dependencies": [],
+    "conflicts": [
+        {
+            "id": "incantation",
+            "min_version": "0.1.0"
+        }
+    ]
+}
