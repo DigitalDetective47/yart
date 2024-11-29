@@ -62,6 +62,134 @@ SMODS.Consumable({
     end,
 })
 SMODS.Consumable({
+    key = "rhigh_priestess",
+    set = "Tarot",
+    pos = { x = 2, y = 0 },
+    atlas = "rtarots",
+    config = { chance = 2 },
+    loc_vars = function(self, info_queue, center)
+        table.insert(info_queue, G.P_TAGS.tag_meteor)
+        return { vars = { G.GAME.probabilities.normal, self.config.chance } }
+    end,
+    can_use = function(self, card)
+        return true
+    end,
+    use = function(self, card, area, copier)
+        if pseudorandom('rhigh_priestess') < G.GAME.probabilities.normal / self.config.chance then
+            add_tag(Tag("tag_meteor"))
+        else
+            G.E_MANAGER:add_event(Event({
+                trigger = "after",
+                delay = 0.4,
+                func = function() --"borrowed" from Wheel Of Fortune
+                    attention_text({
+                        text = localize("k_nope_ex"),
+                        scale = 1.3,
+                        hold = 1.4,
+                        major = used_consumable,
+                        backdrop_colour = G.C.SECONDARY_SET.Planet,
+                        align = (
+                                G.STATE == G.STATES.TAROT_PACK
+                                or G.STATE == G.STATES.SPECTRAL_PACK
+                                or G.STATE == G.STATES.SMODS_BOOSTER_OPENED
+                            )
+                            and "tm"
+                            or "cm",
+                        offset = {
+                            x = 0,
+                            y = (
+                                    G.STATE == G.STATES.TAROT_PACK
+                                    or G.STATE == G.STATES.SPECTRAL_PACK
+                                    or G.STATE == G.STATES.SMODS_BOOSTER_OPENED
+                                )
+                                and -0.2
+                                or 0,
+                        },
+                        silent = true,
+                    })
+                    G.E_MANAGER:add_event(Event({
+                        trigger = "after",
+                        delay = 0.06 * G.SETTINGS.GAMESPEED,
+                        blockable = false,
+                        blocking = false,
+                        func = function()
+                            play_sound("tarot2", 0.76, 0.4)
+                            return true
+                        end,
+                    }))
+                    play_sound("tarot2", 1, 0.4)
+                    used_consumable:juice_up(0.3, 0.5)
+                    return true
+                end,
+            }))
+        end
+    end,
+})
+SMODS.Consumable({
+    key = "remperor",
+    set = "Tarot",
+    pos = { x = 4, y = 0 },
+    atlas = "rtarots",
+    config = { chance = 2 },
+    loc_vars = function(self, info_queue, center)
+        table.insert(info_queue, G.P_TAGS.tag_charm)
+        return { vars = { G.GAME.probabilities.normal, self.config.chance } }
+    end,
+    can_use = function(self, card)
+        return true
+    end,
+    use = function(self, card, area, copier)
+        if pseudorandom('remperor') < G.GAME.probabilities.normal / self.config.chance then
+            add_tag(Tag("tag_charm"))
+        else
+            G.E_MANAGER:add_event(Event({
+                trigger = "after",
+                delay = 0.4,
+                func = function() --"borrowed" from Wheel Of Fortune
+                    attention_text({
+                        text = localize("k_nope_ex"),
+                        scale = 1.3,
+                        hold = 1.4,
+                        major = used_consumable,
+                        backdrop_colour = G.C.SECONDARY_SET.Planet,
+                        align = (
+                                G.STATE == G.STATES.TAROT_PACK
+                                or G.STATE == G.STATES.SPECTRAL_PACK
+                                or G.STATE == G.STATES.SMODS_BOOSTER_OPENED
+                            )
+                            and "tm"
+                            or "cm",
+                        offset = {
+                            x = 0,
+                            y = (
+                                    G.STATE == G.STATES.TAROT_PACK
+                                    or G.STATE == G.STATES.SPECTRAL_PACK
+                                    or G.STATE == G.STATES.SMODS_BOOSTER_OPENED
+                                )
+                                and -0.2
+                                or 0,
+                        },
+                        silent = true,
+                    })
+                    G.E_MANAGER:add_event(Event({
+                        trigger = "after",
+                        delay = 0.06 * G.SETTINGS.GAMESPEED,
+                        blockable = false,
+                        blocking = false,
+                        func = function()
+                            play_sound("tarot2", 0.76, 0.4)
+                            return true
+                        end,
+                    }))
+                    play_sound("tarot2", 1, 0.4)
+                    used_consumable:juice_up(0.3, 0.5)
+                    return true
+                end,
+            }))
+        end
+    end,
+})
+SMODS.Consumable({
     key = "rwheel_of_fortune",
     set = "Tarot",
     pos = { x = 5, y = 1 },
@@ -381,6 +509,70 @@ SMODS.Consumable({
             end
         }))
         delay(0.5)
+    end,
+})
+SMODS.Consumable({
+    key = "rjudgement",
+    set = "Tarot",
+    pos = { x = 2, y = 4 },
+    atlas = "rtarots",
+    config = { chance = 3 },
+    loc_vars = function(self, info_queue, center)
+        table.insert(info_queue, G.P_TAGS.tag_buffoon)
+        return { vars = { G.GAME.probabilities.normal, self.config.chance } }
+    end,
+    can_use = function(self, card)
+        return true
+    end,
+    use = function(self, card, area, copier)
+        if pseudorandom('rjudgement') < G.GAME.probabilities.normal / self.config.chance then
+            add_tag(Tag("tag_buffoon"))
+        else
+            G.E_MANAGER:add_event(Event({
+                trigger = "after",
+                delay = 0.4,
+                func = function() --"borrowed" from Wheel Of Fortune
+                    attention_text({
+                        text = localize("k_nope_ex"),
+                        scale = 1.3,
+                        hold = 1.4,
+                        major = used_consumable,
+                        backdrop_colour = G.C.SECONDARY_SET.Planet,
+                        align = (
+                                G.STATE == G.STATES.TAROT_PACK
+                                or G.STATE == G.STATES.SPECTRAL_PACK
+                                or G.STATE == G.STATES.SMODS_BOOSTER_OPENED
+                            )
+                            and "tm"
+                            or "cm",
+                        offset = {
+                            x = 0,
+                            y = (
+                                    G.STATE == G.STATES.TAROT_PACK
+                                    or G.STATE == G.STATES.SPECTRAL_PACK
+                                    or G.STATE == G.STATES.SMODS_BOOSTER_OPENED
+                                )
+                                and -0.2
+                                or 0,
+                        },
+                        silent = true,
+                    })
+                    G.E_MANAGER:add_event(Event({
+                        trigger = "after",
+                        delay = 0.06 * G.SETTINGS.GAMESPEED,
+                        blockable = false,
+                        blocking = false,
+                        func = function()
+                            play_sound("tarot2", 0.76, 0.4)
+                            return true
+                        end,
+                    }))
+                    play_sound("tarot2", 1, 0.4)
+                    used_consumable:juice_up(0.3, 0.5)
+                    return true
+                end,
+            }))
+        end
     end,
 })
 SMODS.Consumable({

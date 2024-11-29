@@ -17,6 +17,8 @@ return {
             c_yart_rhigh_priestess = {
                 name = "ssetseirP hgiH ehT",
                 text = {
+                    "{C:green}#1# in #2#{} chance to",
+                    "create a {C:planet}Meteor Tag",
                 }
             },
             c_yart_rempress = {
@@ -27,6 +29,8 @@ return {
             c_yart_remperor = {
                 name = "rorepmE ehT",
                 text = {
+                    "{C:green}#1# in #2#{} chance to",
+                    "create a {C:tarot}Charm Tag",
                 }
             },
             c_yart_rheirophant = {
@@ -125,6 +129,8 @@ return {
             c_yart_rjudgement = {
                 name = "tnemegduJ",
                 text = {
+                    "{C:green}#1# in #2#{} chance to",
+                    "create a {C:attention}Buffoon Tag",
                 }
             },
             c_yart_rworld = {
