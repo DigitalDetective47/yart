@@ -439,7 +439,7 @@ SMODS.Consumable({
 SMODS.Consumable({
     key = "rsun",
     set = "Tarot",
-    pos = { x = 3, y = 3 },
+    pos = G.localization.descriptions.Tarot.c_sun.name == "The Sus" and { x = 5, y = 2 } or { x = 3, y = 3 },
     atlas = "rtarots",
     loc_vars = function(self, info_queue, center)
         table.insert(info_queue, G.P_CENTERS.m_glass)
@@ -514,7 +514,7 @@ SMODS.Consumable({
 SMODS.Consumable({
     key = "rjudgement",
     set = "Tarot",
-    pos = { x = 2, y = 4 },
+    pos = { x = 4, y = 3 },
     atlas = "rtarots",
     config = { chance = 3 },
     loc_vars = function(self, info_queue, center)

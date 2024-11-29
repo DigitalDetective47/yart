@@ -119,7 +119,7 @@ return {
                 }
             },
             c_yart_rsun = {
-                name = "nuS ehT",
+                name = G.localization.descriptions.Tarot.c_sun.name == "The Sus" and "suS ehT" or "nuS ehT",
                 text = {
                     "Converts all held",
                     "{C:hearts}Heart{} cards to",
