@@ -86,8 +86,8 @@ SMODS.Consumable({
                         text = localize("k_nope_ex"),
                         scale = 1.3,
                         hold = 1.4,
-                        major = used_consumable,
-                        backdrop_colour = G.C.SECONDARY_SET.Planet,
+                        major = card,
+                        backdrop_colour = G.C.SECONDARY_SET.Tarot,
                         align = (
                                 G.STATE == G.STATES.TAROT_PACK
                                 or G.STATE == G.STATES.SPECTRAL_PACK
@@ -118,7 +118,7 @@ SMODS.Consumable({
                         end,
                     }))
                     play_sound("tarot2", 1, 0.4)
-                    used_consumable:juice_up(0.3, 0.5)
+                    card:juice_up(0.3, 0.5)
                     return true
                 end,
             }))
@@ -150,8 +150,8 @@ SMODS.Consumable({
                         text = localize("k_nope_ex"),
                         scale = 1.3,
                         hold = 1.4,
-                        major = used_consumable,
-                        backdrop_colour = G.C.SECONDARY_SET.Planet,
+                        major = card,
+                        backdrop_colour = G.C.SECONDARY_SET.Tarot,
                         align = (
                                 G.STATE == G.STATES.TAROT_PACK
                                 or G.STATE == G.STATES.SPECTRAL_PACK
@@ -182,7 +182,7 @@ SMODS.Consumable({
                         end,
                     }))
                     play_sound("tarot2", 1, 0.4)
-                    used_consumable:juice_up(0.3, 0.5)
+                    card:juice_up(0.3, 0.5)
                     return true
                 end,
             }))
@@ -536,8 +536,8 @@ SMODS.Consumable({
                         text = localize("k_nope_ex"),
                         scale = 1.3,
                         hold = 1.4,
-                        major = used_consumable,
-                        backdrop_colour = G.C.SECONDARY_SET.Planet,
+                        major = card,
+                        backdrop_colour = G.C.SECONDARY_SET.Tarot,
                         align = (
                                 G.STATE == G.STATES.TAROT_PACK
                                 or G.STATE == G.STATES.SPECTRAL_PACK
@@ -568,7 +568,7 @@ SMODS.Consumable({
                         end,
                     }))
                     play_sound("tarot2", 1, 0.4)
-                    used_consumable:juice_up(0.3, 0.5)
+                    card:juice_up(0.3, 0.5)
                     return true
                 end,
             }))
