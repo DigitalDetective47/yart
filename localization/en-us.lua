@@ -109,11 +109,11 @@ return {
             c_yart_rtemperance = {
                 name = "ecnarepmeT",
                 text = {
-                    "Gives #1# the total sell",
+                    "Lose {C:attention}#1#X{} the total sell",
                     "value of all current",
-                    "Consumables {C:inactive}(Max of {C:money}$#2#{C:inactive})",
-                    "{C:inactive}(Currently {C:money}$#3#{C:inactive})",
-                    "{C:inactive,s:0.8}(Does not include self)",
+                    "Jokers {C:inactive}(Currently {C:money}-$#2#{C:inactive})",
+                    "Then, {C:attention}X#3#{} sell value",
+                    "to all Jokers",
                 }
             },
             c_yart_rdevil = {

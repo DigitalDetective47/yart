@@ -773,35 +773,36 @@ SMODS.Consumable({
     set = "Tarot",
     pos = { x = 3, y = 2 },
     atlas = "rtarots",
-    config = { multiplier = 2, maximum = 50 },
+    config = { cost = 2, increase = 1.5 },
     loc_vars = function(self, info_queue, center)
-        local value = 0
-        if G.consumeables then
-            for k, v in pairs(G.consumeables.cards) do
-                if v ~= self then
-                    value = value + v.sell_cost
-                end
+        local total = 0
+        if G.jokers and G.jokers.cards then
+            for k, v in ipairs(G.jokers.cards) do
+                total = total + v.sell_cost
             end
         end
-        return { vars = { (self.config.multiplier == 2) and "double" or ("X" .. self.config.multiplier), self.config.maximum, value } }
+        return { vars = { self.config.cost, self.config.cost * total, self.config.increase } }
     end,
     can_use = function(self, card)
-        return #G.consumeables.cards >= 1
+        local total = 0
+        for k, v in ipairs(G.jokers.cards) do
+            total = total + v.sell_cost
+        end
+        return #G.jokers.cards > 0 and G.GAME.dollars - self.config.cost * total >= G.GAME.bankrupt_at
     end,
     use = function(self, card, area, copier)
-        local value = 0
-        for k, v in pairs(G.consumeables.cards) do
-            if v ~= self then
-                value = value + v.sell_cost
-            end
+        local total = 0
+        for k, v in ipairs(G.jokers.cards) do
+            total = total + v.sell_cost
+            v.ability.extra_value = (v.ability.extra_value or 0) + v.sell_cost * (self.config.increase - 1)
+            v:set_cost()
         end
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.4,
             func = function()
-                play_sound('timpani')
-                used_tarot:juice_up(0.3, 0.5)
-                ease_dollars(value, true)
+                card:juice_up(0.3, 0.5)
+                ease_dollars(-(self.config.cost * total), true)
                 return true
             end
         }))
