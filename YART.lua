@@ -712,6 +712,31 @@ SMODS.Consumable({
     end,
 })
 SMODS.Consumable({
+    key = "rhermit",
+    set = "Tarot",
+    pos = { x = 4, y = 1 },
+    atlas = "rtarots",
+    loc_vars = function(self, info_queue, center)
+        return { vars = { G.GAME.last_cash_out or G.GAME.starting_params.dollars } }
+    end,
+    can_use = function(self, card)
+        return true
+    end,
+    use = function(self, card, area, copier)
+        G.E_MANAGER:add_event(Event({
+            trigger = "after",
+            delay = 0.4,
+            func = function()
+                play_sound("timpani")
+                card:juice_up(0.3, 0.5)
+                ease_dollars(G.GAME.last_cash_out or G.GAME.starting_params.dollars, true)
+                return true
+            end
+        }))
+        delay(0.6)
+    end,
+})
+SMODS.Consumable({
     key = "rwheel_of_fortune",
     set = "Tarot",
     pos = { x = 5, y = 1 },
