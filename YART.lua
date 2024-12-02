@@ -62,6 +62,93 @@ SMODS.Consumable({
     end,
 })
 SMODS.Consumable({
+    key = "rmagician",
+    set = "Tarot",
+    pos = { x = 1, y = 0 },
+    atlas = "rtarots",
+    loc_vars = function(self, info_queue, center)
+        table.insert(info_queue, G.P_CENTERS.m_lucky)
+        table.insert(info_queue, G.P_CENTERS.m_glass)
+    end,
+    can_use = function(self, card)
+        local has_glass = false
+        local has_lucky = false
+        if G.hand and G.hand.cards then
+            for k, v in ipairs(G.hand.cards) do
+                if v.ability.name == "Glass Card" then
+                    has_glass = true
+                elseif v.ability.name == "Lucky Card" then
+                    has_lucky = true
+                end
+            end
+        end
+        return has_glass and has_lucky
+    end,
+    use = function(self, card, area, copier)
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.4,
+            func = function()
+                play_sound('tarot1')
+                card:juice_up(0.3, 0.5)
+                return true
+            end
+        }))
+        local lucky = {}
+        for k, v in ipairs(G.hand.cards) do
+            if v.ability.name == "Lucky Card" then
+                table.insert(lucky, v)
+            end
+        end
+        lucky = pseudorandom_element(lucky, pseudoseed('rmagician'))
+        local glass = {}
+        for k, v in ipairs(G.hand.cards) do
+            if v.ability.name == "Glass Card" then
+                table.insert(glass, v)
+            end
+        end
+        for i = 1, #glass do
+            local percent = 1.15 - (i - 0.999) / (#glass - 0.998) * 0.3
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.15,
+                func = function()
+                    glass[i]:flip(); play_sound('card1', percent); glass[i]:juice_up(0.3, 0.3); return true
+                end
+            }))
+        end
+        delay(0.2)
+        for i = 1, #glass do
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.1,
+                func = function()
+                    copy_card(lucky, glass[i])
+                    return true
+                end
+            }))
+        end
+        for i = 1, #glass do
+            local percent = 0.85 + (i - 0.999) / (#glass - 0.998) * 0.3
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.15,
+                func = function()
+                    glass[i]:flip(); play_sound('tarot2', percent, 0.6); glass[i]:juice_up(0.3, 0.3); return true
+                end
+            }))
+        end
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.2,
+            func = function()
+                G.hand:unhighlight_all(); return true
+            end
+        }))
+        delay(0.5)
+    end,
+})
+SMODS.Consumable({
     key = "rhigh_priestess",
     set = "Tarot",
     pos = { x = 2, y = 0 },
@@ -126,6 +213,93 @@ SMODS.Consumable({
     end,
 })
 SMODS.Consumable({
+    key = "rempress",
+    set = "Tarot",
+    pos = { x = 3, y = 0 },
+    atlas = "rtarots",
+    loc_vars = function(self, info_queue, center)
+        table.insert(info_queue, G.P_CENTERS.m_mult)
+        table.insert(info_queue, G.P_CENTERS.m_bonus)
+    end,
+    can_use = function(self, card)
+        local has_bonus = false
+        local has_mult = false
+        if G.hand and G.hand.cards then
+            for k, v in ipairs(G.hand.cards) do
+                if v.ability.name == "Bonus Card" then
+                    has_bonus = true
+                elseif v.ability.name == "Mult Card" then
+                    has_mult = true
+                end
+            end
+        end
+        return has_bonus and has_mult
+    end,
+    use = function(self, card, area, copier)
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.4,
+            func = function()
+                play_sound('tarot1')
+                card:juice_up(0.3, 0.5)
+                return true
+            end
+        }))
+        local mult = {}
+        for k, v in ipairs(G.hand.cards) do
+            if v.ability.name == "Mult Card" then
+                table.insert(mult, v)
+            end
+        end
+        mult = pseudorandom_element(mult, pseudoseed('rempress'))
+        local bonus = {}
+        for k, v in ipairs(G.hand.cards) do
+            if v.ability.name == "Bonus Card" then
+                table.insert(bonus, v)
+            end
+        end
+        for i = 1, #bonus do
+            local percent = 1.15 - (i - 0.999) / (#bonus - 0.998) * 0.3
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.15,
+                func = function()
+                    bonus[i]:flip(); play_sound('card1', percent); bonus[i]:juice_up(0.3, 0.3); return true
+                end
+            }))
+        end
+        delay(0.2)
+        for i = 1, #bonus do
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.1,
+                func = function()
+                    copy_card(mult, bonus[i])
+                    return true
+                end
+            }))
+        end
+        for i = 1, #bonus do
+            local percent = 0.85 + (i - 0.999) / (#bonus - 0.998) * 0.3
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.15,
+                func = function()
+                    bonus[i]:flip(); play_sound('tarot2', percent, 0.6); bonus[i]:juice_up(0.3, 0.3); return true
+                end
+            }))
+        end
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.2,
+            func = function()
+                G.hand:unhighlight_all(); return true
+            end
+        }))
+        delay(0.5)
+    end,
+})
+SMODS.Consumable({
     key = "remperor",
     set = "Tarot",
     pos = { x = 4, y = 0 },
@@ -187,6 +361,354 @@ SMODS.Consumable({
                 end,
             }))
         end
+    end,
+})
+SMODS.Consumable({
+    key = "rheirophant",
+    set = "Tarot",
+    pos = { x = 0, y = 1 },
+    atlas = "rtarots",
+    loc_vars = function(self, info_queue, center)
+        table.insert(info_queue, G.P_CENTERS.m_bonus)
+        table.insert(info_queue, G.P_CENTERS.m_mult)
+    end,
+    can_use = function(self, card)
+        local has_mult = false
+        local has_bonus = false
+        if G.hand and G.hand.cards then
+            for k, v in ipairs(G.hand.cards) do
+                if v.ability.name == "Mult Card" then
+                    has_mult = true
+                elseif v.ability.name == "Bonus Card" then
+                    has_bonus = true
+                end
+            end
+        end
+        return has_mult and has_bonus
+    end,
+    use = function(self, card, area, copier)
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.4,
+            func = function()
+                play_sound('tarot1')
+                card:juice_up(0.3, 0.5)
+                return true
+            end
+        }))
+        local bonus = {}
+        for k, v in ipairs(G.hand.cards) do
+            if v.ability.name == "Bonus Card" then
+                table.insert(bonus, v)
+            end
+        end
+        bonus = pseudorandom_element(bonus, pseudoseed('rheirophant'))
+        local mult = {}
+        for k, v in ipairs(G.hand.cards) do
+            if v.ability.name == "Mult Card" then
+                table.insert(mult, v)
+            end
+        end
+        for i = 1, #mult do
+            local percent = 1.15 - (i - 0.999) / (#mult - 0.998) * 0.3
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.15,
+                func = function()
+                    mult[i]:flip(); play_sound('card1', percent); mult[i]:juice_up(0.3, 0.3); return true
+                end
+            }))
+        end
+        delay(0.2)
+        for i = 1, #mult do
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.1,
+                func = function()
+                    copy_card(bonus, mult[i])
+                    return true
+                end
+            }))
+        end
+        for i = 1, #mult do
+            local percent = 0.85 + (i - 0.999) / (#mult - 0.998) * 0.3
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.15,
+                func = function()
+                    mult[i]:flip(); play_sound('tarot2', percent, 0.6); mult[i]:juice_up(0.3, 0.3); return true
+                end
+            }))
+        end
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.2,
+            func = function()
+                G.hand:unhighlight_all(); return true
+            end
+        }))
+        delay(0.5)
+    end,
+})
+SMODS.Consumable({
+    key = "rlovers",
+    set = "Tarot",
+    pos = { x = 1, y = 1 },
+    atlas = "rtarots",
+    loc_vars = function(self, info_queue, center)
+        table.insert(info_queue, G.P_CENTERS.m_wild)
+        table.insert(info_queue, G.P_CENTERS.m_stone)
+    end,
+    can_use = function(self, card)
+        local has_stone = false
+        local has_wild = false
+        if G.hand and G.hand.cards then
+            for k, v in ipairs(G.hand.cards) do
+                if v.ability.name == "Stone Card" then
+                    has_stone = true
+                elseif v.ability.name == "Wild Card" then
+                    has_wild = true
+                end
+            end
+        end
+        return has_stone and has_wild
+    end,
+    use = function(self, card, area, copier)
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.4,
+            func = function()
+                play_sound('tarot1')
+                card:juice_up(0.3, 0.5)
+                return true
+            end
+        }))
+        local wild = {}
+        for k, v in ipairs(G.hand.cards) do
+            if v.ability.name == "Wild Card" then
+                table.insert(wild, v)
+            end
+        end
+        wild = pseudorandom_element(wild, pseudoseed('rlovers'))
+        local stone = {}
+        for k, v in ipairs(G.hand.cards) do
+            if v.ability.name == "Stone Card" then
+                table.insert(stone, v)
+            end
+        end
+        for i = 1, #stone do
+            local percent = 1.15 - (i - 0.999) / (#stone - 0.998) * 0.3
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.15,
+                func = function()
+                    stone[i]:flip(); play_sound('card1', percent); stone[i]:juice_up(0.3, 0.3); return true
+                end
+            }))
+        end
+        delay(0.2)
+        for i = 1, #stone do
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.1,
+                func = function()
+                    copy_card(wild, stone[i])
+                    return true
+                end
+            }))
+        end
+        for i = 1, #stone do
+            local percent = 0.85 + (i - 0.999) / (#stone - 0.998) * 0.3
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.15,
+                func = function()
+                    stone[i]:flip(); play_sound('tarot2', percent, 0.6); stone[i]:juice_up(0.3, 0.3); return true
+                end
+            }))
+        end
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.2,
+            func = function()
+                G.hand:unhighlight_all(); return true
+            end
+        }))
+        delay(0.5)
+    end,
+})
+SMODS.Consumable({
+    key = "rchariot",
+    set = "Tarot",
+    pos = { x = 2, y = 1 },
+    atlas = "rtarots",
+    loc_vars = function(self, info_queue, center)
+        table.insert(info_queue, G.P_CENTERS.m_steel)
+        table.insert(info_queue, G.P_CENTERS.m_gold)
+    end,
+    can_use = function(self, card)
+        local has_gold = false
+        local has_steel = false
+        if G.hand and G.hand.cards then
+            for k, v in ipairs(G.hand.cards) do
+                if v.ability.name == "Gold Card" then
+                    has_gold = true
+                elseif v.ability.name == "Steel Card" then
+                    has_steel = true
+                end
+            end
+        end
+        return has_gold and has_steel
+    end,
+    use = function(self, card, area, copier)
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.4,
+            func = function()
+                play_sound('tarot1')
+                card:juice_up(0.3, 0.5)
+                return true
+            end
+        }))
+        local steel = {}
+        for k, v in ipairs(G.hand.cards) do
+            if v.ability.name == "Steel Card" then
+                table.insert(steel, v)
+            end
+        end
+        steel = pseudorandom_element(steel, pseudoseed('rchariot'))
+        local gold = {}
+        for k, v in ipairs(G.hand.cards) do
+            if v.ability.name == "Gold Card" then
+                table.insert(gold, v)
+            end
+        end
+        for i = 1, #gold do
+            local percent = 1.15 - (i - 0.999) / (#gold - 0.998) * 0.3
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.15,
+                func = function()
+                    gold[i]:flip(); play_sound('card1', percent); gold[i]:juice_up(0.3, 0.3); return true
+                end
+            }))
+        end
+        delay(0.2)
+        for i = 1, #gold do
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.1,
+                func = function()
+                    copy_card(steel, gold[i])
+                    return true
+                end
+            }))
+        end
+        for i = 1, #gold do
+            local percent = 0.85 + (i - 0.999) / (#gold - 0.998) * 0.3
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.15,
+                func = function()
+                    gold[i]:flip(); play_sound('tarot2', percent, 0.6); gold[i]:juice_up(0.3, 0.3); return true
+                end
+            }))
+        end
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.2,
+            func = function()
+                G.hand:unhighlight_all(); return true
+            end
+        }))
+        delay(0.5)
+    end,
+})
+SMODS.Consumable({
+    key = "rjustice",
+    set = "Tarot",
+    pos = { x = 3, y = 1 },
+    atlas = "rtarots",
+    loc_vars = function(self, info_queue, center)
+        table.insert(info_queue, G.P_CENTERS.m_glass)
+        table.insert(info_queue, G.P_CENTERS.m_lucky)
+    end,
+    can_use = function(self, card)
+        local has_lucky = false
+        local has_glass = false
+        if G.hand and G.hand.cards then
+            for k, v in ipairs(G.hand.cards) do
+                if v.ability.name == "Lucky Card" then
+                    has_lucky = true
+                elseif v.ability.name == "Glass Card" then
+                    has_glass = true
+                end
+            end
+        end
+        return has_lucky and has_glass
+    end,
+    use = function(self, card, area, copier)
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.4,
+            func = function()
+                play_sound('tarot1')
+                card:juice_up(0.3, 0.5)
+                return true
+            end
+        }))
+        local glass = {}
+        for k, v in ipairs(G.hand.cards) do
+            if v.ability.name == "Glass Card" then
+                table.insert(glass, v)
+            end
+        end
+        glass = pseudorandom_element(glass, pseudoseed('rjustice'))
+        local lucky = {}
+        for k, v in ipairs(G.hand.cards) do
+            if v.ability.name == "Lucky Card" then
+                table.insert(lucky, v)
+            end
+        end
+        for i = 1, #lucky do
+            local percent = 1.15 - (i - 0.999) / (#lucky - 0.998) * 0.3
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.15,
+                func = function()
+                    lucky[i]:flip(); play_sound('card1', percent); lucky[i]:juice_up(0.3, 0.3); return true
+                end
+            }))
+        end
+        delay(0.2)
+        for i = 1, #lucky do
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.1,
+                func = function()
+                    copy_card(glass, lucky[i])
+                    return true
+                end
+            }))
+        end
+        for i = 1, #lucky do
+            local percent = 0.85 + (i - 0.999) / (#lucky - 0.998) * 0.3
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.15,
+                func = function()
+                    lucky[i]:flip(); play_sound('tarot2', percent, 0.6); lucky[i]:juice_up(0.3, 0.3); return true
+                end
+            }))
+        end
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.2,
+            func = function()
+                G.hand:unhighlight_all(); return true
+            end
+        }))
+        delay(0.5)
     end,
 })
 SMODS.Consumable({
@@ -284,6 +806,180 @@ SMODS.Consumable({
             end
         }))
         delay(0.6)
+    end,
+})
+SMODS.Consumable({
+    key = "rdevil",
+    set = "Tarot",
+    pos = { x = 4, y = 2 },
+    atlas = "rtarots",
+    loc_vars = function(self, info_queue, center)
+        table.insert(info_queue, G.P_CENTERS.m_gold)
+        table.insert(info_queue, G.P_CENTERS.m_steel)
+    end,
+    can_use = function(self, card)
+        local has_steel = false
+        local has_gold = false
+        if G.hand and G.hand.cards then
+            for k, v in ipairs(G.hand.cards) do
+                if v.ability.name == "Steel Card" then
+                    has_steel = true
+                elseif v.ability.name == "Gold Card" then
+                    has_gold = true
+                end
+            end
+        end
+        return has_steel and has_gold
+    end,
+    use = function(self, card, area, copier)
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.4,
+            func = function()
+                play_sound('tarot1')
+                card:juice_up(0.3, 0.5)
+                return true
+            end
+        }))
+        local gold = {}
+        for k, v in ipairs(G.hand.cards) do
+            if v.ability.name == "Gold Card" then
+                table.insert(gold, v)
+            end
+        end
+        gold = pseudorandom_element(gold, pseudoseed('rdevil'))
+        local steel = {}
+        for k, v in ipairs(G.hand.cards) do
+            if v.ability.name == "Steel Card" then
+                table.insert(steel, v)
+            end
+        end
+        for i = 1, #steel do
+            local percent = 1.15 - (i - 0.999) / (#steel - 0.998) * 0.3
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.15,
+                func = function()
+                    steel[i]:flip(); play_sound('card1', percent); steel[i]:juice_up(0.3, 0.3); return true
+                end
+            }))
+        end
+        delay(0.2)
+        for i = 1, #steel do
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.1,
+                func = function()
+                    copy_card(gold, steel[i])
+                    return true
+                end
+            }))
+        end
+        for i = 1, #steel do
+            local percent = 0.85 + (i - 0.999) / (#steel - 0.998) * 0.3
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.15,
+                func = function()
+                    steel[i]:flip(); play_sound('tarot2', percent, 0.6); steel[i]:juice_up(0.3, 0.3); return true
+                end
+            }))
+        end
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.2,
+            func = function()
+                G.hand:unhighlight_all(); return true
+            end
+        }))
+        delay(0.5)
+    end,
+})
+SMODS.Consumable({
+    key = "rtower",
+    set = "Tarot",
+    pos = { x = 0, y = 3 },
+    atlas = "rtarots",
+    loc_vars = function(self, info_queue, center)
+        table.insert(info_queue, G.P_CENTERS.m_stone)
+        table.insert(info_queue, G.P_CENTERS.m_wild)
+    end,
+    can_use = function(self, card)
+        local has_wild = false
+        local has_stone = false
+        if G.hand and G.hand.cards then
+            for k, v in ipairs(G.hand.cards) do
+                if v.ability.name == "Wild Card" then
+                    has_wild = true
+                elseif v.ability.name == "Stone Card" then
+                    has_stone = true
+                end
+            end
+        end
+        return has_wild and has_stone
+    end,
+    use = function(self, card, area, copier)
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.4,
+            func = function()
+                play_sound('tarot1')
+                card:juice_up(0.3, 0.5)
+                return true
+            end
+        }))
+        local stone = {}
+        for k, v in ipairs(G.hand.cards) do
+            if v.ability.name == "Stone Card" then
+                table.insert(stone, v)
+            end
+        end
+        stone = pseudorandom_element(stone, pseudoseed('rtower'))
+        local wild = {}
+        for k, v in ipairs(G.hand.cards) do
+            if v.ability.name == "Wild Card" then
+                table.insert(wild, v)
+            end
+        end
+        for i = 1, #wild do
+            local percent = 1.15 - (i - 0.999) / (#wild - 0.998) * 0.3
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.15,
+                func = function()
+                    wild[i]:flip(); play_sound('card1', percent); wild[i]:juice_up(0.3, 0.3); return true
+                end
+            }))
+        end
+        delay(0.2)
+        for i = 1, #wild do
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.1,
+                func = function()
+                    copy_card(stone, wild[i])
+                    return true
+                end
+            }))
+        end
+        for i = 1, #wild do
+            local percent = 0.85 + (i - 0.999) / (#wild - 0.998) * 0.3
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.15,
+                func = function()
+                    wild[i]:flip(); play_sound('tarot2', percent, 0.6); wild[i]:juice_up(0.3, 0.3); return true
+                end
+            }))
+        end
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.2,
+            func = function()
+                G.hand:unhighlight_all(); return true
+            end
+        }))
+        delay(0.5)
     end,
 })
 SMODS.Consumable({

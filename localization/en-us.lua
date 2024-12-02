@@ -12,6 +12,10 @@ return {
             c_yart_rmagician = {
                 name = "naicigaM ehT",
                 text = {
+                    "Converts all held",
+                    "{C:attention}Glass Cards{} to a",
+                    "random {C:attention}Lucky Card{}",
+                    "held in hand",
                 }
             },
             c_yart_rhigh_priestess = {
@@ -24,6 +28,10 @@ return {
             c_yart_rempress = {
                 name = "sserpmE ehT",
                 text = {
+                    "Converts all held",
+                    "{C:attention}Bonus Cards{} to a",
+                    "random {C:attention}Mult Card{}",
+                    "held in hand",
                 }
             },
             c_yart_remperor = {
@@ -36,21 +44,37 @@ return {
             c_yart_rheirophant = {
                 name = "tnahporeiH ehT",
                 text = {
+                    "Converts all held",
+                    "{C:attention}Mult Cards{} to a",
+                    "random {C:attention}Bonus Card{}",
+                    "held in hand",
                 }
             },
             c_yart_rlovers = {
                 name = "srevoL ehT",
                 text = {
+                    "Converts all held",
+                    "{C:attention}Stone Cards{} to a",
+                    "random {C:attention}Wild Card{}",
+                    "held in hand",
                 }
             },
             c_yart_rchariot = {
                 name = "toirahC ehT",
                 text = {
+                    "Converts all held",
+                    "{C:attention}Gold Cards{} to a",
+                    "random {C:attention}Steel Card{}",
+                    "held in hand",
                 }
             },
             c_yart_rjustice = {
                 name = "ecitsuJ",
                 text = {
+                    "Converts all held",
+                    "{C:attention}Lucky Cards{} to a",
+                    "random {C:attention}Steel Card{}",
+                    "held in hand",
                 }
             },
             c_yart_rhermit = {
@@ -95,11 +119,19 @@ return {
             c_yart_rdevil = {
                 name = "liveD ehT",
                 text = {
+                    "Converts all held",
+                    "{C:attention}Steel Cards{} to a",
+                    "random {C:attention}Gold Card{}",
+                    "held in hand",
                 }
             },
             c_yart_rtower = {
                 name = "rewoT ehT",
                 text = {
+                    "Converts all held",
+                    "{C:attention}Wild Cards{} to a",
+                    "random {C:attention}Stone Card{}",
+                    "held in hand",
                 }
             },
             c_yart_rstar = {
