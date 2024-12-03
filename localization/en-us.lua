@@ -99,6 +99,10 @@ return {
             c_yart_rstrength = {
                 name = "htgnertS",
                 text = {
+                    "Converts up to",
+                    "{C:attention}#1#{} selected cards",
+                    "to a random rank",
+                    "in your deck",
                 }
             },
             c_yart_rhanged_man = {

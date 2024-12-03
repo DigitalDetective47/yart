@@ -794,6 +794,91 @@ SMODS.Consumable({
     end,
 })
 SMODS.Consumable({
+    key = "rstrength",
+    set = "Tarot",
+    pos = { x = 0, y = 2 },
+    atlas = "rtarots",
+    config = { limit = 3 },
+    loc_vars = function(self, info_queue, center)
+        return { vars = { self.config.limit } }
+    end,
+    can_use = function(self, card)
+        return #G.hand.highlighted > 0 and #G.hand.highlighted <= self.config.limit
+    end,
+    use = function(self, card, area, copier)
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.4,
+            func = function()
+                play_sound('tarot1')
+                card:juice_up(0.3, 0.5)
+                return true
+            end
+        }))
+        for i = 1, #G.hand.highlighted do
+            local percent = 1.15 - (i - 0.999) / (#G.hand.highlighted - 0.998) * 0.3
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.15,
+                func = function()
+                    G.hand.highlighted[i]:flip(); play_sound('card1', percent); G.hand.highlighted[i]:juice_up(0.3, 0.3); return true
+                end
+            }))
+        end
+        local rank_suffix = {}
+        for k, v in ipairs(G.playing_cards) do
+            if v.ability.name ~= "Stone Card" and not v.config.center.no_rank then
+                table.insert(rank_suffix, v)
+            end
+        end
+        rank_suffix = pseudorandom_element(rank_suffix, pseudoseed('rStrength')).base.id
+        if rank_suffix < 10 then
+            rank_suffix = tostring(rank_suffix)
+        elseif rank_suffix == 10 then
+            rank_suffix = 'T'
+        elseif rank_suffix == 11 then
+            rank_suffix = 'J'
+        elseif rank_suffix == 12 then
+            rank_suffix = 'Q'
+        elseif rank_suffix == 13 then
+            rank_suffix = 'K'
+        elseif rank_suffix == 14 then
+            rank_suffix = 'A'
+        end
+        delay(0.2)
+        for k, v in ipairs(G.hand.highlighted) do
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.1,
+                func = function()
+                    local suit_prefix = string.sub(v.base.suit, 1, 1) .. '_'
+                    v:set_base(G.P_CARDS[suit_prefix .. rank_suffix])
+                    return true
+                end
+            }))
+        end
+        for i = 1, #G.hand.highlighted do
+            local percent = 0.85 + (i - 0.999) / (#G.hand.highlighted - 0.998) * 0.3
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.15,
+                func = function()
+                    G.hand.highlighted[i]:flip(); play_sound('tarot2', percent, 0.6); G.hand.highlighted[i]:juice_up(0.3,
+                        0.3); return true
+                end
+            }))
+        end
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.2,
+            func = function()
+                G.hand:unhighlight_all(); return true
+            end
+        }))
+        delay(0.5)
+    end,
+})
+SMODS.Consumable({
     key = "rtemperance",
     set = "Tarot",
     pos = { x = 3, y = 2 },
