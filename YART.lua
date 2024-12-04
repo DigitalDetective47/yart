@@ -16,7 +16,7 @@ SMODS.Consumable({
     set = "Tarot",
     pos = { x = 0, y = 0 },
     atlas = "rtarots",
-    loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
         local fool_c = G.GAME.yart_last_other and G.P_CENTERS[G.GAME.yart_last_other] or nil
         local yart_last_other = fool_c and localize { type = 'name_text', key = fool_c.key, set = fool_c.set } or
             localize('k_none')
@@ -66,7 +66,7 @@ SMODS.Consumable({
     set = "Tarot",
     pos = { x = 1, y = 0 },
     atlas = "rtarots",
-    loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_CENTERS.m_lucky)
         table.insert(info_queue, G.P_CENTERS.m_glass)
     end,
@@ -154,15 +154,15 @@ SMODS.Consumable({
     pos = { x = 2, y = 0 },
     atlas = "rtarots",
     config = { chance = 2 },
-    loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_TAGS.tag_meteor)
-        return { vars = { G.GAME.probabilities.normal, self.config.chance } }
+        return { vars = { G.GAME.probabilities.normal, card.ability.chance } }
     end,
     can_use = function(self, card)
         return true
     end,
     use = function(self, card, area, copier)
-        if pseudorandom('rhigh_priestess') < G.GAME.probabilities.normal / self.config.chance then
+        if pseudorandom('rhigh_priestess') < G.GAME.probabilities.normal / card.ability.chance then
             add_tag(Tag("tag_meteor"))
         else
             G.E_MANAGER:add_event(Event({
@@ -217,7 +217,7 @@ SMODS.Consumable({
     set = "Tarot",
     pos = { x = 3, y = 0 },
     atlas = "rtarots",
-    loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_CENTERS.m_mult)
         table.insert(info_queue, G.P_CENTERS.m_bonus)
     end,
@@ -305,15 +305,15 @@ SMODS.Consumable({
     pos = { x = 4, y = 0 },
     atlas = "rtarots",
     config = { chance = 2 },
-    loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_TAGS.tag_charm)
-        return { vars = { G.GAME.probabilities.normal, self.config.chance } }
+        return { vars = { G.GAME.probabilities.normal, card.ability.chance } }
     end,
     can_use = function(self, card)
         return true
     end,
     use = function(self, card, area, copier)
-        if pseudorandom('remperor') < G.GAME.probabilities.normal / self.config.chance then
+        if pseudorandom('remperor') < G.GAME.probabilities.normal / card.ability.chance then
             add_tag(Tag("tag_charm"))
         else
             G.E_MANAGER:add_event(Event({
@@ -368,7 +368,7 @@ SMODS.Consumable({
     set = "Tarot",
     pos = { x = 0, y = 1 },
     atlas = "rtarots",
-    loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_CENTERS.m_bonus)
         table.insert(info_queue, G.P_CENTERS.m_mult)
     end,
@@ -455,7 +455,7 @@ SMODS.Consumable({
     set = "Tarot",
     pos = { x = 1, y = 1 },
     atlas = "rtarots",
-    loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_CENTERS.m_wild)
         table.insert(info_queue, G.P_CENTERS.m_stone)
     end,
@@ -542,7 +542,7 @@ SMODS.Consumable({
     set = "Tarot",
     pos = { x = 2, y = 1 },
     atlas = "rtarots",
-    loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_CENTERS.m_steel)
         table.insert(info_queue, G.P_CENTERS.m_gold)
     end,
@@ -629,7 +629,7 @@ SMODS.Consumable({
     set = "Tarot",
     pos = { x = 3, y = 1 },
     atlas = "rtarots",
-    loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_CENTERS.m_glass)
         table.insert(info_queue, G.P_CENTERS.m_lucky)
     end,
@@ -716,7 +716,7 @@ SMODS.Consumable({
     set = "Tarot",
     pos = { x = 4, y = 1 },
     atlas = "rtarots",
-    loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
         return { vars = { G.GAME.last_cash_out or G.GAME.starting_params.dollars } }
     end,
     can_use = function(self, card)
@@ -742,9 +742,9 @@ SMODS.Consumable({
     pos = { x = 5, y = 1 },
     atlas = "rtarots",
     config = { chance = 4 },
-    loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_CENTERS.e_negative)
-        return { vars = { G.GAME.probabilities.normal, self.config.chance } }
+        return { vars = { G.GAME.probabilities.normal, card.ability.chance } }
     end,
     can_use = function(self, card)
         for k, v in pairs(G.jokers.cards) do
@@ -754,7 +754,7 @@ SMODS.Consumable({
         end
     end,
     use = function(self, card, area, copier)
-        if pseudorandom('rwheel_of_fortune') < G.GAME.probabilities.normal / self.config.chance then
+        if pseudorandom('rwheel_of_fortune') < G.GAME.probabilities.normal / card.ability.chance then
             local pool = {}
             for k, v in pairs(G.jokers.cards) do
                 if v.ability.set == 'Joker' and (not v.edition) then
@@ -799,11 +799,11 @@ SMODS.Consumable({
     pos = { x = 0, y = 2 },
     atlas = "rtarots",
     config = { limit = 3 },
-    loc_vars = function(self, info_queue, center)
-        return { vars = { self.config.limit } }
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.limit } }
     end,
     can_use = function(self, card)
-        return #G.hand.highlighted > 0 and #G.hand.highlighted <= self.config.limit
+        return #G.hand.highlighted > 0 and #G.hand.highlighted <= card.ability.limit
     end,
     use = function(self, card, area, copier)
         G.E_MANAGER:add_event(Event({
@@ -884,27 +884,27 @@ SMODS.Consumable({
     pos = { x = 3, y = 2 },
     atlas = "rtarots",
     config = { cost = 2, increase = 1.5 },
-    loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
         local total = 0
         if G.jokers and G.jokers.cards then
             for k, v in ipairs(G.jokers.cards) do
                 total = total + v.sell_cost
             end
         end
-        return { vars = { self.config.cost, self.config.cost * total, self.config.increase } }
+        return { vars = { card.ability.cost, card.ability.cost * total, card.ability.increase } }
     end,
     can_use = function(self, card)
         local total = 0
         for k, v in ipairs(G.jokers.cards) do
             total = total + v.sell_cost
         end
-        return #G.jokers.cards > 0 and G.GAME.dollars - self.config.cost * total >= G.GAME.bankrupt_at
+        return #G.jokers.cards > 0 and G.GAME.dollars - card.ability.cost * total >= G.GAME.bankrupt_at
     end,
     use = function(self, card, area, copier)
         local total = 0
         for k, v in ipairs(G.jokers.cards) do
             total = total + v.sell_cost
-            v.ability.extra_value = (v.ability.extra_value or 0) + v.sell_cost * (self.config.increase - 1)
+            v.ability.extra_value = (v.ability.extra_value or 0) + v.sell_cost * (card.ability.increase - 1)
             v:set_cost()
         end
         G.E_MANAGER:add_event(Event({
@@ -912,7 +912,7 @@ SMODS.Consumable({
             delay = 0.4,
             func = function()
                 card:juice_up(0.3, 0.5)
-                ease_dollars(-(self.config.cost * total), true)
+                ease_dollars(-(card.ability.cost * total), true)
                 return true
             end
         }))
@@ -924,7 +924,7 @@ SMODS.Consumable({
     set = "Tarot",
     pos = { x = 4, y = 2 },
     atlas = "rtarots",
-    loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_CENTERS.m_gold)
         table.insert(info_queue, G.P_CENTERS.m_steel)
     end,
@@ -1011,7 +1011,7 @@ SMODS.Consumable({
     set = "Tarot",
     pos = { x = 0, y = 3 },
     atlas = "rtarots",
-    loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_CENTERS.m_stone)
         table.insert(info_queue, G.P_CENTERS.m_wild)
     end,
@@ -1098,7 +1098,7 @@ SMODS.Consumable({
     set = "Tarot",
     pos = { x = 1, y = 3 },
     atlas = "rtarots",
-    loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_CENTERS.m_gold)
     end,
     can_use = function(self, card)
@@ -1173,7 +1173,7 @@ SMODS.Consumable({
     set = "Tarot",
     pos = { x = 2, y = 3 },
     atlas = "rtarots",
-    loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_CENTERS.m_mult)
     end,
     can_use = function(self, card)
@@ -1248,7 +1248,7 @@ SMODS.Consumable({
     set = "Tarot",
     pos = G.localization.descriptions.Tarot.c_sun.name == "The Sus" and { x = 5, y = 2 } or { x = 3, y = 3 },
     atlas = "rtarots",
-    loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_CENTERS.m_glass)
     end,
     can_use = function(self, card)
@@ -1324,15 +1324,15 @@ SMODS.Consumable({
     pos = { x = 4, y = 3 },
     atlas = "rtarots",
     config = { chance = 3 },
-    loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_TAGS.tag_buffoon)
-        return { vars = { G.GAME.probabilities.normal, self.config.chance } }
+        return { vars = { G.GAME.probabilities.normal, card.ability.chance } }
     end,
     can_use = function(self, card)
         return true
     end,
     use = function(self, card, area, copier)
-        if pseudorandom('rjudgement') < G.GAME.probabilities.normal / self.config.chance then
+        if pseudorandom('rjudgement') < G.GAME.probabilities.normal / card.ability.chance then
             add_tag(Tag("tag_buffoon"))
         else
             G.E_MANAGER:add_event(Event({
@@ -1387,7 +1387,7 @@ SMODS.Consumable({
     set = "Tarot",
     pos = { x = 5, y = 3 },
     atlas = "rtarots",
-    loc_vars = function(self, info_queue, center)
+    loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_CENTERS.m_bonus)
     end,
     can_use = function(self, card)
