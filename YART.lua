@@ -879,6 +879,60 @@ SMODS.Consumable({
     end,
 })
 SMODS.Consumable({
+    key = "rhanged_man",
+    set = "Tarot",
+    pos = { x = 1, y = 2 },
+    atlas = "rtarots",
+    can_use = function(self, card)
+        return #G.hand.cards > 0
+    end,
+    use = function(self, card, area, copier)
+        local destroy = {}
+        if pseudorandom('rhanged_man') < 0.5 then
+            for k, v in ipairs(G.hand.highlighted) do
+                table.insert(destroy, v)
+            end
+        else
+            for k, v in ipairs(G.hand.cards) do
+                local highlighted = false
+                for hk, hv in ipairs(G.hand.highlighted) do
+                    if v == hv then
+                        highlighted = true
+                        break
+                    end
+                end
+                if not highlighted then
+                    table.insert(destroy, v)
+                end
+            end
+        end
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.4,
+            func = function()
+                play_sound('tarot1')
+                card:juice_up(0.3, 0.5)
+                return true
+            end
+        }))
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.2,
+            func = function()
+                for k, v in ipairs(destroy) do
+                    if v.ability.name == 'Glass Card' then
+                        v:shatter()
+                    else
+                        v:start_dissolve()
+                    end
+                end
+                G.hand:unhighlight_all()
+                return true
+            end
+        }))
+    end,
+})
+SMODS.Consumable({
     key = "rtemperance",
     set = "Tarot",
     pos = { x = 3, y = 2 },

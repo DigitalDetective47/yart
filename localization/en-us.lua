@@ -108,6 +108,9 @@ return {
             c_yart_rhanged_man = {
                 name = "naM degnaH ehT",
                 text = {
+                    "Randomly destroy either",
+                    "all selected or unselected",
+                    "cards held in hand",
                 }
             },
             c_yart_rdeath = {
