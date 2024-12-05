@@ -10,11 +10,7 @@
     "badge_colour": "A782D1",
     "display_name": "YART",
     "version": "0.1.0",
-    "dependencies": [],
     "conflicts": [
-        {
-            "id": "incantation",
-            "min_version": "0.1.0"
-        }
+        "incantation()"
     ]
 }
