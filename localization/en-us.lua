@@ -163,7 +163,7 @@ return {
                 }
             },
             c_yart_rsun = {
-                name = G.localization.descriptions.Tarot.c_sun.name == "The Sus" and "suS ehT" or "nuS ehT",
+                name = "nuS ehT",
                 text = {
                     "Converts all held",
                     "{C:hearts}Heart{} cards to",
@@ -185,6 +185,17 @@ return {
                     "{C:attention}Bonus Cards{}",
                 }
             },
+        },
+        alt_texture = {
+            alt_tex_sus_sus = {
+                name = "The Sus"
+            },
+            alt_tex_yart_rsus = {
+                name = "suS ehT",
+                c_yart_rsun = {
+                    name = "suS ehT"
+                }
+            }
         }
     }
 }
