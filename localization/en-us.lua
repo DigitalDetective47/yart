@@ -116,6 +116,13 @@ return {
             c_yart_rdeath = {
                 name = "htaeD",
                 text = {
+                    "Select up to {C:attention}#1#{} cards,",
+                    "convert all other cards",
+                    "into the {C:attention}rightmost{} card",
+                    "Then, lose {C:money}money{} equal to the",
+                    "{C:chips}chip value{} of the copied card",
+                    "{C:inactive}(Currently {C:money}-$#2#{C:inactive})",
+                    "{C:inactive}(Drag to rearrange)",
                 }
             },
             c_yart_rtemperance = {
