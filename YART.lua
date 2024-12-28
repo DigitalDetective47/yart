@@ -1613,17 +1613,17 @@ SMODS.Consumable({
     end,
 })
 
-table.insert(G.CHALLENGES[14].restrictions.banned_cards, 8, { id = "c_yart_rmagician" })
-table.insert(G.CHALLENGES[14].restrictions.banned_cards, 9, { id = "c_yart_rempress" })
-table.insert(G.CHALLENGES[14].restrictions.banned_cards, 10, { id = "c_yart_rmoon" })
-table.insert(G.CHALLENGES[14].restrictions.banned_cards, 11, { id = "c_yart_rheirophant" })
-table.insert(G.CHALLENGES[14].restrictions.banned_cards, 12, { id = "c_yart_rworld" })
-table.insert(G.CHALLENGES[14].restrictions.banned_cards, 13, { id = "c_yart_rchariot" })
-table.insert(G.CHALLENGES[14].restrictions.banned_cards, 14, { id = "c_yart_rdevil" })
-table.insert(G.CHALLENGES[14].restrictions.banned_cards, 15, { id = "c_yart_rstar" })
-table.insert(G.CHALLENGES[14].restrictions.banned_cards, 16, { id = "c_yart_rtower" })
-table.insert(G.CHALLENGES[14].restrictions.banned_cards, 17, { id = "c_yart_rlovers" })
-table.insert(G.CHALLENGES[20].restrictions.banned_cards, 2, { id = "c_yart_rjudgement" })
+table.insert(SMODS.Challenges.c_fragile_1.restrictions.banned_cards, 8, { id = "c_yart_rmagician" })
+table.insert(SMODS.Challenges.c_fragile_1.restrictions.banned_cards, 9, { id = "c_yart_rempress" })
+table.insert(SMODS.Challenges.c_fragile_1.restrictions.banned_cards, 10, { id = "c_yart_rmoon" })
+table.insert(SMODS.Challenges.c_fragile_1.restrictions.banned_cards, 11, { id = "c_yart_rheirophant" })
+table.insert(SMODS.Challenges.c_fragile_1.restrictions.banned_cards, 12, { id = "c_yart_rworld" })
+table.insert(SMODS.Challenges.c_fragile_1.restrictions.banned_cards, 13, { id = "c_yart_rchariot" })
+table.insert(SMODS.Challenges.c_fragile_1.restrictions.banned_cards, 14, { id = "c_yart_rdevil" })
+table.insert(SMODS.Challenges.c_fragile_1.restrictions.banned_cards, 15, { id = "c_yart_rstar" })
+table.insert(SMODS.Challenges.c_fragile_1.restrictions.banned_cards, 16, { id = "c_yart_rtower" })
+table.insert(SMODS.Challenges.c_fragile_1.restrictions.banned_cards, 17, { id = "c_yart_rlovers" })
+table.insert(SMODS.Challenges.c_jokerless_1.restrictions.banned_cards, 2, { id = "c_yart_rjudgement" })
 
 if (SMODS.Mods["sun_is_sus"] or {}).can_load then
     AltTexture({
