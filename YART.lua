@@ -42,7 +42,7 @@ SMODS.Consumable({
         return { main_end = main_end }
     end,
     can_use = function(self, card)
-        return (#G.consumeables.cards < G.consumeables.config.card_limit or self.area == G.consumeables)
+        return (#G.consumeables.cards < G.consumeables.config.card_limit or card.area == G.consumeables)
             and G.GAME.yart_last_other
     end,
     use = function(self, card, area, copier)
@@ -51,10 +51,10 @@ SMODS.Consumable({
             delay = 0.4,
             func = function()
                 play_sound('timpani')
-                local card = create_card(nil, G.consumeables, nil, nil, nil, nil, G.GAME.yart_last_other)
-                card:add_to_deck()
-                G.consumeables:emplace(card)
-                used_tarot:juice_up(0.3, 0.5)
+                local new = create_card(nil, G.consumeables, nil, nil, nil, nil, G.GAME.yart_last_other)
+                new:add_to_deck()
+                G.consumeables:emplace(new)
+                card:juice_up(0.3, 0.5)
                 return true
             end
         }))
