@@ -10,8 +10,5 @@
     "badge_colour": "A782D1",
     "display_name": "YART",
     "version": "1.1.0~dev",
-    "priority": 1,
-    "conflicts": [
-        "incantation()"
-    ]
+    "priority": 1
 }
