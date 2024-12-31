@@ -30,7 +30,7 @@ SMODS.Consumable({
                         n = G.UIT.C,
                         config = { align = "m", colour = colour, r = 0.05, padding = 0.05 },
                         nodes = {
-                            { n = G.UIT.T, config = { text = " " .. yart_last_other .. " ", colour = G.C.UI.TEXT_LIGHT, scale = 0.3, shadow = true } },
+                            { n = G.UIT.T, config = { text = ' ' .. yart_last_other .. ' ', colour = G.C.UI.TEXT_LIGHT, scale = 0.3, shadow = true } },
                         }
                     }
                 }
@@ -161,6 +161,7 @@ SMODS.Consumable({
     can_use = function(self, card)
         return true
     end,
+    can_bulk_use = true,
     use = function(self, card, area, copier)
         if pseudorandom('rhigh_priestess') < G.GAME.probabilities.normal / card.ability.chance then
             add_tag(Tag("tag_meteor"))
@@ -312,6 +313,7 @@ SMODS.Consumable({
     can_use = function(self, card)
         return true
     end,
+    can_bulk_use = true,
     use = function(self, card, area, copier)
         if pseudorandom('remperor') < G.GAME.probabilities.normal / card.ability.chance then
             add_tag(Tag("tag_charm"))
@@ -722,6 +724,7 @@ SMODS.Consumable({
     can_use = function(self, card)
         return true
     end,
+    can_bulk_use = true,
     use = function(self, card, area, copier)
         G.E_MANAGER:add_event(Event({
             trigger = "after",
@@ -730,6 +733,19 @@ SMODS.Consumable({
                 play_sound("timpani")
                 card:juice_up(0.3, 0.5)
                 ease_dollars(G.GAME.last_cash_out or G.GAME.starting_params.dollars, true)
+                return true
+            end
+        }))
+        delay(0.6)
+    end,
+    bulk_use = function(self, card, area, copier, number)
+        G.E_MANAGER:add_event(Event({
+            trigger = "after",
+            delay = 0.4,
+            func = function()
+                play_sound("timpani")
+                card:juice_up(0.3, 0.5)
+                ease_dollars((G.GAME.last_cash_out or G.GAME.starting_params.dollars) * number, true)
                 return true
             end
         }))
@@ -1486,6 +1502,7 @@ SMODS.Consumable({
     can_use = function(self, card)
         return true
     end,
+    can_bulk_use = true,
     use = function(self, card, area, copier)
         if pseudorandom('rjudgement') < G.GAME.probabilities.normal / card.ability.chance then
             add_tag(Tag("tag_buffoon"))
