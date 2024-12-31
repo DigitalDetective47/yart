@@ -30,14 +30,14 @@ SMODS.Consumable({
                         n = G.UIT.C,
                         config = { align = "m", colour = colour, r = 0.05, padding = 0.05 },
                         nodes = {
-                            { n = G.UIT.T, config = { text = ' ' .. yart_last_other .. ' ', colour = G.C.UI.TEXT_LIGHT, scale = 0.3, shadow = true } },
+                            { n = G.UIT.T, config = { text = " " .. yart_last_other .. " ", colour = G.C.UI.TEXT_LIGHT, scale = 0.3, shadow = true } },
                         }
                     }
                 }
             }
         }
-        if not (not fool_c) then
-            info_queue[#info_queue + 1] = fool_c
+        if fool_c then
+            table.insert(info_queue, fool_c)
         end
         return { main_end = main_end }
     end,
