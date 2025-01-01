@@ -156,7 +156,7 @@ SMODS.Consumable({
     config = { chance = 2 },
     loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_TAGS.tag_meteor)
-        return { vars = { G.GAME.probabilities.normal, card.ability.chance } }
+        return { vars = { G.GAME.probabilities.normal, card and card.ability.chance or self.config.chance } }
     end,
     can_use = function(self, card)
         return true
@@ -308,7 +308,7 @@ SMODS.Consumable({
     config = { chance = 2 },
     loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_TAGS.tag_charm)
-        return { vars = { G.GAME.probabilities.normal, card.ability.chance } }
+        return { vars = { G.GAME.probabilities.normal, card and card.ability.chance or self.config.chance } }
     end,
     can_use = function(self, card)
         return true
@@ -760,7 +760,7 @@ SMODS.Consumable({
     config = { chance = 4 },
     loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_CENTERS.e_negative)
-        return { vars = { G.GAME.probabilities.normal, card.ability.chance } }
+        return { vars = { G.GAME.probabilities.normal, card and card.ability.chance or self.config.chance } }
     end,
     can_use = function(self, card)
         for k, v in pairs(G.jokers.cards) do
@@ -816,7 +816,7 @@ SMODS.Consumable({
     atlas = "rtarots",
     config = { limit = 3 },
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.limit } }
+        return { vars = { card and card.ability.limit or self.config.limit } }
     end,
     can_use = function(self, card)
         return #G.hand.highlighted > 0 and #G.hand.highlighted <= card.ability.limit
@@ -964,7 +964,7 @@ SMODS.Consumable({
                 end
             end
         end
-        return { vars = { card.ability.limit, rightmost and rightmost:get_chip_bonus() or 0 } }
+        return { vars = { card and card.ability.limit or self.config.limit, rightmost and rightmost:get_chip_bonus() or 0 } }
     end,
     can_use = function(self, card)
         local rightmost = nil
@@ -1062,7 +1062,7 @@ SMODS.Consumable({
                 total = total + v.sell_cost
             end
         end
-        return { vars = { card.ability.cost, card.ability.cost * total, card.ability.increase } }
+        return { vars = { card.ability.cost, card.ability.cost * total, card and card.ability.increase or self.config.increase } }
     end,
     can_use = function(self, card)
         local total = 0
@@ -1497,7 +1497,7 @@ SMODS.Consumable({
     config = { chance = 3 },
     loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_TAGS.tag_buffoon)
-        return { vars = { G.GAME.probabilities.normal, card.ability.chance } }
+        return { vars = { G.GAME.probabilities.normal, card and card.ability.chance or self.config.chance } }
     end,
     can_use = function(self, card)
         return true
