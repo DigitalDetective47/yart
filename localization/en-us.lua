@@ -73,7 +73,7 @@ return {
                 text = {
                     "Converts all held",
                     "{C:attention}Lucky Cards{} to a",
-                    "random {C:attention}Steel Card{}",
+                    "random {C:attention}Glass Card{}",
                     "held in hand",
                 }
             },
