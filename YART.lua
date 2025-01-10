@@ -5,6 +5,12 @@ SMODS.Atlas({
     py = 34,
 })
 
+function defaultBulkUse(self, card, area, copier, number)
+    for i = 1, number, 1 do
+        self:use(card, area, copier)
+    end
+end
+
 SMODS.Atlas({
     key = "rtarots",
     path = "tarot.png",
@@ -212,6 +218,7 @@ SMODS.Consumable({
             }))
         end
     end,
+    bulk_use = defaultBulkUse,
 })
 SMODS.Consumable({
     key = "rempress",
@@ -364,6 +371,7 @@ SMODS.Consumable({
             }))
         end
     end,
+    bulk_use = defaultBulkUse,
 })
 SMODS.Consumable({
     key = "rheirophant",
@@ -1553,6 +1561,7 @@ SMODS.Consumable({
             }))
         end
     end,
+    bulk_use = defaultBulkUse,
 })
 SMODS.Consumable({
     key = "rworld",
