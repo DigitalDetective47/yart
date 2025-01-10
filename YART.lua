@@ -985,7 +985,9 @@ SMODS.Consumable({
             end
         end
         return #G.hand.highlighted >= 2 and #G.hand.highlighted <= card.ability.limit and
-            G.GAME.dollars - rightmost:get_chip_bonus() >= G.GAME.bankrupt_at
+            G.GAME.dollars - rightmost:get_chip_bonus() -
+            ((card.area == G.shop_jokers or card.area == G.shop_booster or card.area == G.shop_vouchers) and card.cost or 0) >=
+            G.GAME.bankrupt_at
     end,
     use = function(self, card, area, copier)
         G.E_MANAGER:add_event(Event({
@@ -1077,7 +1079,10 @@ SMODS.Consumable({
         for k, v in ipairs(G.jokers.cards) do
             total = total + v.sell_cost
         end
-        return #G.jokers.cards > 0 and G.GAME.dollars - card.ability.cost * total >= G.GAME.bankrupt_at
+        return #G.jokers.cards > 0 and
+        G.GAME.dollars - card.ability.cost * total -
+        ((card.area == G.shop_jokers or card.area == G.shop_booster or card.area == G.shop_vouchers) and card.cost or 0) >=
+        G.GAME.bankrupt_at
     end,
     use = function(self, card, area, copier)
         local total = 0
