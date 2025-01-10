@@ -81,9 +81,9 @@ SMODS.Consumable({
         local has_lucky = false
         if G.hand and G.hand.cards then
             for k, v in ipairs(G.hand.cards) do
-                if v.ability.name == "Glass Card" then
+                if SMODS.has_enhancement(v, "m_glass") then
                     has_glass = true
-                elseif v.ability.name == "Lucky Card" then
+                elseif SMODS.has_enhancement(v, "m_lucky") then
                     has_lucky = true
                 end
             end
@@ -102,14 +102,14 @@ SMODS.Consumable({
         }))
         local lucky = {}
         for k, v in ipairs(G.hand.cards) do
-            if v.ability.name == "Lucky Card" then
+            if SMODS.has_enhancement(v, "m_lucky") then
                 table.insert(lucky, v)
             end
         end
         lucky = pseudorandom_element(lucky, pseudoseed('rmagician'))
         local glass = {}
         for k, v in ipairs(G.hand.cards) do
-            if v.ability.name == "Glass Card" then
+            if SMODS.has_enhancement(v, "m_glass") then
                 table.insert(glass, v)
             end
         end
@@ -234,9 +234,9 @@ SMODS.Consumable({
         local has_mult = false
         if G.hand and G.hand.cards then
             for k, v in ipairs(G.hand.cards) do
-                if v.ability.name == "Bonus Card" then
+                if SMODS.has_enhancement(v, "m_bonus") then
                     has_bonus = true
-                elseif v.ability.name == "Mult Card" then
+                elseif SMODS.has_enhancement(v, "m_mult") then
                     has_mult = true
                 end
             end
@@ -255,14 +255,14 @@ SMODS.Consumable({
         }))
         local mult = {}
         for k, v in ipairs(G.hand.cards) do
-            if v.ability.name == "Mult Card" then
+            if SMODS.has_enhancement(v, "m_mult") then
                 table.insert(mult, v)
             end
         end
         mult = pseudorandom_element(mult, pseudoseed('rempress'))
         local bonus = {}
         for k, v in ipairs(G.hand.cards) do
-            if v.ability.name == "Bonus Card" then
+            if SMODS.has_enhancement(v, "m_bonus") then
                 table.insert(bonus, v)
             end
         end
@@ -387,9 +387,9 @@ SMODS.Consumable({
         local has_bonus = false
         if G.hand and G.hand.cards then
             for k, v in ipairs(G.hand.cards) do
-                if v.ability.name == "Mult Card" then
+                if SMODS.has_enhancement(v, "m_mult") then
                     has_mult = true
-                elseif v.ability.name == "Bonus Card" then
+                elseif SMODS.has_enhancement(v, "m_bonus") then
                     has_bonus = true
                 end
             end
@@ -408,14 +408,14 @@ SMODS.Consumable({
         }))
         local bonus = {}
         for k, v in ipairs(G.hand.cards) do
-            if v.ability.name == "Bonus Card" then
+            if SMODS.has_enhancement(v, "m_bonus") then
                 table.insert(bonus, v)
             end
         end
         bonus = pseudorandom_element(bonus, pseudoseed('rheirophant'))
         local mult = {}
         for k, v in ipairs(G.hand.cards) do
-            if v.ability.name == "Mult Card" then
+            if SMODS.has_enhancement(v, "m_mult") then
                 table.insert(mult, v)
             end
         end
@@ -474,9 +474,9 @@ SMODS.Consumable({
         local has_wild = false
         if G.hand and G.hand.cards then
             for k, v in ipairs(G.hand.cards) do
-                if v.ability.name == "Stone Card" then
+                if SMODS.has_enhancement(v, "m_stone") then
                     has_stone = true
-                elseif v.ability.name == "Wild Card" then
+                elseif SMODS.has_enhancement(v, "m_wild") then
                     has_wild = true
                 end
             end
@@ -495,14 +495,14 @@ SMODS.Consumable({
         }))
         local wild = {}
         for k, v in ipairs(G.hand.cards) do
-            if v.ability.name == "Wild Card" then
+            if SMODS.has_enhancement(v, "m_wild") then
                 table.insert(wild, v)
             end
         end
         wild = pseudorandom_element(wild, pseudoseed('rlovers'))
         local stone = {}
         for k, v in ipairs(G.hand.cards) do
-            if v.ability.name == "Stone Card" then
+            if SMODS.has_enhancement(v, "m_stone") then
                 table.insert(stone, v)
             end
         end
@@ -561,9 +561,9 @@ SMODS.Consumable({
         local has_steel = false
         if G.hand and G.hand.cards then
             for k, v in ipairs(G.hand.cards) do
-                if v.ability.name == "Gold Card" then
+                if SMODS.has_enhancement(v, "m_gold") then
                     has_gold = true
-                elseif v.ability.name == "Steel Card" then
+                elseif SMODS.has_enhancement(v, "m_steel") then
                     has_steel = true
                 end
             end
@@ -582,14 +582,14 @@ SMODS.Consumable({
         }))
         local steel = {}
         for k, v in ipairs(G.hand.cards) do
-            if v.ability.name == "Steel Card" then
+            if SMODS.has_enhancement(v, "m_steel") then
                 table.insert(steel, v)
             end
         end
         steel = pseudorandom_element(steel, pseudoseed('rchariot'))
         local gold = {}
         for k, v in ipairs(G.hand.cards) do
-            if v.ability.name == "Gold Card" then
+            if SMODS.has_enhancement(v, "m_gold") then
                 table.insert(gold, v)
             end
         end
@@ -648,9 +648,9 @@ SMODS.Consumable({
         local has_glass = false
         if G.hand and G.hand.cards then
             for k, v in ipairs(G.hand.cards) do
-                if v.ability.name == "Lucky Card" then
+                if SMODS.has_enhancement(v, "m_lucky") then
                     has_lucky = true
-                elseif v.ability.name == "Glass Card" then
+                elseif SMODS.has_enhancement(v, "m_glass") then
                     has_glass = true
                 end
             end
@@ -669,14 +669,14 @@ SMODS.Consumable({
         }))
         local glass = {}
         for k, v in ipairs(G.hand.cards) do
-            if v.ability.name == "Glass Card" then
+            if SMODS.has_enhancement(v, "m_glass") then
                 table.insert(glass, v)
             end
         end
         glass = pseudorandom_element(glass, pseudoseed('rjustice'))
         local lucky = {}
         for k, v in ipairs(G.hand.cards) do
-            if v.ability.name == "Lucky Card" then
+            if SMODS.has_enhancement(v, "m_lucky") then
                 table.insert(lucky, v)
             end
         end
@@ -851,7 +851,7 @@ SMODS.Consumable({
         end
         local rank_suffix = {}
         for k, v in ipairs(G.playing_cards) do
-            if v.ability.name ~= "Stone Card" and not v.config.center.no_rank then
+            if v.ability.name ~= "m_stone" and not v.config.center.no_rank then
                 table.insert(rank_suffix, v)
             end
         end
@@ -944,7 +944,7 @@ SMODS.Consumable({
             delay = 0.2,
             func = function()
                 for k, v in ipairs(destroy) do
-                    if v.ability.name == 'Glass Card' then
+                    if v.ability.name == 'm_glass' then
                         v:shatter()
                     else
                         v:start_dissolve()
@@ -1112,9 +1112,9 @@ SMODS.Consumable({
         local has_gold = false
         if G.hand and G.hand.cards then
             for k, v in ipairs(G.hand.cards) do
-                if v.ability.name == "Steel Card" then
+                if SMODS.has_enhancement(v, "m_steel") then
                     has_steel = true
-                elseif v.ability.name == "Gold Card" then
+                elseif SMODS.has_enhancement(v, "m_gold") then
                     has_gold = true
                 end
             end
@@ -1133,14 +1133,14 @@ SMODS.Consumable({
         }))
         local gold = {}
         for k, v in ipairs(G.hand.cards) do
-            if v.ability.name == "Gold Card" then
+            if SMODS.has_enhancement(v, "m_gold") then
                 table.insert(gold, v)
             end
         end
         gold = pseudorandom_element(gold, pseudoseed('rdevil'))
         local steel = {}
         for k, v in ipairs(G.hand.cards) do
-            if v.ability.name == "Steel Card" then
+            if SMODS.has_enhancement(v, "m_steel") then
                 table.insert(steel, v)
             end
         end
@@ -1199,9 +1199,9 @@ SMODS.Consumable({
         local has_stone = false
         if G.hand and G.hand.cards then
             for k, v in ipairs(G.hand.cards) do
-                if v.ability.name == "Wild Card" then
+                if SMODS.has_enhancement(v, "m_wild") then
                     has_wild = true
-                elseif v.ability.name == "Stone Card" then
+                elseif SMODS.has_enhancement(v, "m_stone") then
                     has_stone = true
                 end
             end
@@ -1220,14 +1220,14 @@ SMODS.Consumable({
         }))
         local stone = {}
         for k, v in ipairs(G.hand.cards) do
-            if v.ability.name == "Stone Card" then
+            if SMODS.has_enhancement(v, "m_stone") then
                 table.insert(stone, v)
             end
         end
         stone = pseudorandom_element(stone, pseudoseed('rtower'))
         local wild = {}
         for k, v in ipairs(G.hand.cards) do
-            if v.ability.name == "Wild Card" then
+            if SMODS.has_enhancement(v, "m_wild") then
                 table.insert(wild, v)
             end
         end
