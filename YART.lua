@@ -849,34 +849,20 @@ SMODS.Consumable({
                 end
             }))
         end
-        local rank_suffix = {}
+        local rank = {}
         for k, v in ipairs(G.playing_cards) do
-            if v.ability.name ~= "m_stone" and not v.config.center.no_rank then
-                table.insert(rank_suffix, v)
+            if not SMODS.has_no_rank(v) then
+                table.insert(rank, v.base.value)
             end
         end
-        rank_suffix = pseudorandom_element(rank_suffix, pseudoseed('rStrength')).base.id
-        if rank_suffix < 10 then
-            rank_suffix = tostring(rank_suffix)
-        elseif rank_suffix == 10 then
-            rank_suffix = 'T'
-        elseif rank_suffix == 11 then
-            rank_suffix = 'J'
-        elseif rank_suffix == 12 then
-            rank_suffix = 'Q'
-        elseif rank_suffix == 13 then
-            rank_suffix = 'K'
-        elseif rank_suffix == 14 then
-            rank_suffix = 'A'
-        end
+        rank = pseudorandom_element(rank, pseudoseed('rStrength'))
         delay(0.2)
         for k, v in ipairs(G.hand.highlighted) do
             G.E_MANAGER:add_event(Event({
                 trigger = 'after',
                 delay = 0.1,
                 func = function()
-                    local suit_prefix = string.sub(v.base.suit, 1, 1) .. '_'
-                    v:set_base(G.P_CARDS[suit_prefix .. rank_suffix])
+                    SMODS.change_base(v, nil, rank)
                     return true
                 end
             }))
