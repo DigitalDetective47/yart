@@ -197,7 +197,7 @@ return {
             alt_tex_sus_sus = {
                 name = "The Sus"
             },
-            alt_tex_yart_rsus = {
+            alt_tex_yart_sun_is_sus = {
                 name = "suS ehT",
                 c_yart_rsun = {
                     name = "suS ehT"
