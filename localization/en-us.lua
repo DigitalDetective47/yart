@@ -206,6 +206,9 @@ return {
             alt_tex_yart_gensokyo_consumables = {
                 name = "toraT uohuoT"
             },
+            alt_tex_yart_hdtextures = {
+                name = "storaT DH"
+            },
         }
     }
 }

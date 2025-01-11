@@ -1664,3 +1664,11 @@ if (SMODS.Mods["gensokyo_consumables"] or {}).can_load then
     })
     table.insert(TexturePacks.texpack_gensokyo_consumables_touhou.textures, "yart_gensokyo_consumables")
 end
+if (SMODS.Mods["hdtextures"] or {}).can_load then
+    AltTexture({
+        key = "hdtextures",
+        set = "Tarot",
+        path = "hdtextures.png",
+    })
+    table.insert(TexturePacks.texpack_hdtextures_hd.textures, "yart_hdtextures")
+end
