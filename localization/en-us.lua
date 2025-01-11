@@ -202,7 +202,10 @@ return {
                 c_yart_rsun = {
                     name = "suS ehT"
                 }
-            }
+            },
+            alt_tex_yart_gensokyo_consumables = {
+                name = "toraT uohuoT"
+            },
         }
     }
 }
