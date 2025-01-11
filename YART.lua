@@ -1672,3 +1672,11 @@ if (SMODS.Mods["hdtextures"] or {}).can_load then
     })
     table.insert(TexturePacks.texpack_hdtextures_hd.textures, "yart_hdtextures")
 end
+if (SMODS.Mods["moonspell"] or {}).can_load then
+    AltTexture({
+        key = "moonspell",
+        set = "Tarot",
+        path = "moonspell.png",
+    })
+    table.insert(TexturePacks.texpack_moonspell_moonspell.textures, "yart_moonspell")
+end

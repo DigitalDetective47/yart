@@ -209,6 +209,9 @@ return {
             alt_tex_yart_hdtextures = {
                 name = "storaT DH"
             },
+            alt_tex_yart_moonspell = {
+                name = "llepsnooM"
+            },
         }
     }
 }
