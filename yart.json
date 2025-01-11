@@ -9,6 +9,6 @@
     "main_file": "YART.lua",
     "badge_colour": "A782D1",
     "display_name": "YART",
-    "version": "1.1.0",
+    "version": "1.1.1~dev",
     "priority": 1
 }
