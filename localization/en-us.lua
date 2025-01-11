@@ -212,6 +212,33 @@ return {
             alt_tex_yart_moonspell = {
                 name = "llepsnooM"
             },
+            alt_tex_yart_bookofthothtarot = {
+                c_magician = {
+                    name = "sugaM ehT"
+                },
+                c_high_priestess = {
+                    name = "ssetseirP ehT"
+                },
+                c_justice = {
+                    name = "tnemtsujdA"
+                },
+                c_wheel_of_fortune = {
+                    name = "enutroF"
+                },
+                c_strength = {
+                    name = "tsuL"
+                },
+                c_temperance = {
+                    name = "trA"
+                },
+                c_judgement = {
+                    name = "noÆ ehT"
+                },
+                c_world = {
+                    name = "esrevinU ehT"
+                },
+                name = "htohT fo kooB ehT"
+            },
         }
     }
 }
