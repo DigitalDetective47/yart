@@ -1644,9 +1644,9 @@ table.insert(SMODS.Challenges.c_jokerless_1.restrictions.banned_cards, 2, { id =
 
 if (SMODS.Mods["sun_is_sus"] or {}).can_load then
     AltTexture({
-        key = "rsus",
+        key = "sun_is_sus",
         set = "Tarot",
-        path = "rsus.png",
+        path = "sun_is_sus.png",
         keys = {
             "c_yart_rsun"
         },
@@ -1654,5 +1654,5 @@ if (SMODS.Mods["sun_is_sus"] or {}).can_load then
             "c_yart_rsun"
         }
     })
-    table.insert(TexturePacks.texpack_sus_sus.textures, "yart_rsus")
+    table.insert(TexturePacks.texpack_sus_sus.textures, "yart_sun_is_sus")
 end
