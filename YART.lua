@@ -1662,7 +1662,7 @@ if (SMODS.Mods["gensokyo_consumables"] or {}).can_load then
         set = "Tarot",
         path = "gensokyo_consumables.png",
     })
-    table.insert(TexturePacks.texpack_gensokyo_consumables_touhou.textures, "yart_gensokyo_consumables")
+    table.insert(TexturePacks.texpack_gensokyo_touhou.textures, "yart_gensokyo_consumables")
 end
 if (SMODS.Mods["hdtextures"] or {}).can_load then
     AltTexture({
