@@ -9,6 +9,9 @@
     "main_file": "YART.lua",
     "badge_colour": "A782D1",
     "display_name": "YART",
-    "version": "1.1.1",
-    "priority": 1
+    "version": "1.1.2~dev",
+    "priority": 1,
+    "dependencies": [
+        "Steamodded (>=1.0.0~ALPHA-1317b)"
+    ]
 }
