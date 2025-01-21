@@ -973,7 +973,7 @@ SMODS.Consumable({
         return #G.hand.highlighted >= 2 and #G.hand.highlighted <= card.ability.limit and
             G.GAME.dollars - rightmost:get_chip_bonus() -
             ((card.area == G.shop_jokers or card.area == G.shop_booster or card.area == G.shop_vouchers) and card.cost or 0) >=
-            SMODS.Mods.Talisman and SMODS.Mods.Talisman.can_load and to_big(G.GAME.bankrupt_at) or G.GAME.bankrupt_at
+            (SMODS.Mods.Talisman and SMODS.Mods.Talisman.can_load and to_big(G.GAME.bankrupt_at) or G.GAME.bankrupt_at)
     end,
     use = function(self, card, area, copier)
         G.E_MANAGER:add_event(Event({
