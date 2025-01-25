@@ -1068,7 +1068,7 @@ SMODS.Consumable({
         return #G.jokers.cards > 0 and
             G.GAME.dollars - card.ability.cost * total -
             ((card.area == G.shop_jokers or card.area == G.shop_booster or card.area == G.shop_vouchers) and card.cost or 0) >=
-            G.GAME.bankrupt_at
+            (SMODS.Mods.Talisman and SMODS.Mods.Talisman.can_load and to_big(G.GAME.bankrupt_at) or G.GAME.bankrupt_at)
     end,
     use = function(self, card, area, copier)
         local total = 0
