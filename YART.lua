@@ -1629,16 +1629,18 @@ SMODS.Consumable({
     end,
 })
 
-table.insert(SMODS.Challenges.c_fragile_1.restrictions.banned_cards, 8, { id = "c_yart_rmagician" })
-table.insert(SMODS.Challenges.c_fragile_1.restrictions.banned_cards, 9, { id = "c_yart_rempress" })
-table.insert(SMODS.Challenges.c_fragile_1.restrictions.banned_cards, 10, { id = "c_yart_rmoon" })
-table.insert(SMODS.Challenges.c_fragile_1.restrictions.banned_cards, 11, { id = "c_yart_rheirophant" })
-table.insert(SMODS.Challenges.c_fragile_1.restrictions.banned_cards, 12, { id = "c_yart_rworld" })
-table.insert(SMODS.Challenges.c_fragile_1.restrictions.banned_cards, 13, { id = "c_yart_rchariot" })
-table.insert(SMODS.Challenges.c_fragile_1.restrictions.banned_cards, 14, { id = "c_yart_rdevil" })
-table.insert(SMODS.Challenges.c_fragile_1.restrictions.banned_cards, 15, { id = "c_yart_rstar" })
-table.insert(SMODS.Challenges.c_fragile_1.restrictions.banned_cards, 16, { id = "c_yart_rtower" })
-table.insert(SMODS.Challenges.c_fragile_1.restrictions.banned_cards, 17, { id = "c_yart_rlovers" })
+StrangeLib.bulk_add(SMODS.Challenges.c_fragile_1.restrictions.banned_cards, {
+    { id = "c_yart_rmagician" },
+    { id = "c_yart_rempress" },
+    { id = "c_yart_rheirophant" },
+    { id = "c_yart_rlovers" },
+    { id = "c_yart_rchariot" },
+    { id = "c_yart_rdevil" },
+    { id = "c_yart_rtower" },
+    { id = "c_yart_rstar" },
+    { id = "c_yart_rmoon" },
+    { id = "c_yart_rworld" },
+})
 table.insert(SMODS.Challenges.c_jokerless_1.restrictions.banned_cards, 2, { id = "c_yart_rjudgement" })
 
 if (SMODS.Mods["sun_is_sus"] or {}).can_load then
