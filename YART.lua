@@ -5,12 +5,6 @@ SMODS.Atlas({
     py = 34,
 })
 
-function defaultBulkUse(self, card, area, copier, number)
-    for i = 1, number, 1 do
-        self:use(card, area, copier)
-    end
-end
-
 ---Modify cards with the tarot animation
 ---@param targets Card[]
 ---@param modification fun(card: Card): nil
@@ -254,7 +248,6 @@ SMODS.Consumable({
             }))
         end
     end,
-    bulk_use = defaultBulkUse,
 })
 SMODS.Consumable({
     key = "rempress",
@@ -407,7 +400,6 @@ SMODS.Consumable({
             }))
         end
     end,
-    bulk_use = defaultBulkUse,
 })
 SMODS.Consumable({
     key = "rheirophant",
@@ -1587,7 +1579,6 @@ SMODS.Consumable({
             }))
         end
     end,
-    bulk_use = defaultBulkUse,
 })
 SMODS.Consumable({
     key = "rworld",
