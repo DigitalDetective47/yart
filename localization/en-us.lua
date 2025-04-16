@@ -12,10 +12,9 @@ return {
             c_yart_rmagician = {
                 name = "naicigaM ehT",
                 text = {
-                    "Converts all held",
-                    "{C:attention}Glass Cards{} to a",
-                    "random {C:attention}Lucky Card{}",
-                    "held in hand",
+                    "{C:green}#1# in #2#{} chance to",
+                    "convert entire hand",
+                    "into {C:attention}Lucky Cards{}",
                 }
             },
             c_yart_rhigh_priestess = {

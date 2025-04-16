@@ -11,6 +11,106 @@ function defaultBulkUse(self, card, area, copier, number)
     end
 end
 
+---Modify cards with the tarot animation
+---@param targets Card[]
+---@param modification fun(card: Card): nil
+local function modify_cards(targets, modification)
+    for i, target in ipairs(targets) do
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.15,
+            func = function()
+                target:flip()
+                play_sound('card1', 1.15 - (i - 0.999) / (#targets - 0.998) * 0.3)
+                target:juice_up(0.3, 0.3)
+                return true
+            end
+        }))
+    end
+    delay(0.2)
+    for i, target in ipairs(targets) do
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.1,
+            func = function()
+                modification(target)
+                return true
+            end
+        }))
+    end
+    for i, target in ipairs(targets) do
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.15,
+            func = function()
+                target:flip()
+                play_sound('tarot2', 0.85 + (i - 0.999) / (#targets - 0.998) * 0.3, 0.6)
+                target:juice_up(0.3, 0.3)
+                return true
+            end
+        }))
+    end
+    G.E_MANAGER:add_event(Event({
+        trigger = 'after',
+        delay = 0.2,
+        func = function()
+            G.hand:unhighlight_all(); return true
+        end
+    }))
+    delay(0.5)
+end
+
+---@class Colour { r: number, g: number, b: number, a: number }
+
+---@param card Card
+---@param colour Colour
+local function nope(card, colour)
+    G.E_MANAGER:add_event(Event({
+        trigger = "after",
+        delay = 0.4,
+        func = function() --"borrowed" from Wheel Of Fortune
+            attention_text({
+                text = localize("k_nope_ex"),
+                scale = 1.3,
+                hold = 1.4,
+                major = card,
+                backdrop_colour = colour,
+                align = (
+                        G.STATE == G.STATES.TAROT_PACK
+                        or G.STATE == G.STATES.SPECTRAL_PACK
+                        or G.STATE == G.STATES.SMODS_BOOSTER_OPENED
+                    )
+                    and "tm"
+                    or "cm",
+                offset = {
+                    x = 0,
+                    y = (
+                            G.STATE == G.STATES.TAROT_PACK
+                            or G.STATE == G.STATES.SPECTRAL_PACK
+                            or G.STATE == G.STATES.SMODS_BOOSTER_OPENED
+                        )
+                        and -0.2
+                        or 0,
+                },
+                silent = true,
+            })
+            G.E_MANAGER:add_event(Event({
+                trigger = "after",
+                delay = 0.06 * G.SETTINGS.GAMESPEED,
+                blockable = false,
+                blocking = false,
+                func = function()
+                    play_sound("tarot2", 0.76, 0.4)
+                    return true
+                end,
+            }))
+            play_sound("tarot2", 1, 0.4)
+            card:juice_up(0.3, 0.5)
+            return true
+        end,
+    }))
+end
+
 SMODS.Atlas({
     key = "rtarots",
     path = "tarot.png",
@@ -72,86 +172,22 @@ SMODS.Consumable({
     set = "Tarot",
     pos = { x = 1, y = 0 },
     atlas = "rtarots",
+    config = { chance = 7 },
     loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_CENTERS.m_lucky)
-        table.insert(info_queue, G.P_CENTERS.m_glass)
+        return { vars = { G.GAME.probabilities.normal, card.ability.chance } }
     end,
     can_use = function(self, card)
-        local has_glass = false
-        local has_lucky = false
-        if G.hand and G.hand.cards then
-            for k, v in ipairs(G.hand.cards) do
-                if SMODS.has_enhancement(v, "m_glass") then
-                    has_glass = true
-                elseif SMODS.has_enhancement(v, "m_lucky") then
-                    has_lucky = true
-                end
-            end
-        end
-        return has_glass and has_lucky
+        return #G.hand.cards ~= 0
     end,
     use = function(self, card, area, copier)
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.4,
-            func = function()
-                play_sound('tarot1')
-                card:juice_up(0.3, 0.5)
-                return true
-            end
-        }))
-        local lucky = {}
-        for k, v in ipairs(G.hand.cards) do
-            if SMODS.has_enhancement(v, "m_lucky") then
-                table.insert(lucky, v)
-            end
+        if pseudorandom('rmagician') < G.GAME.probabilities.normal / card.ability.chance then
+            modify_cards(G.hand.cards, function(target)
+                target:set_ability(G.P_CENTERS.m_lucky)
+            end)
+        else
+            nope(card, G.C.SECONDARY_SET.Tarot)
         end
-        lucky = pseudorandom_element(lucky, pseudoseed('rmagician'))
-        local glass = {}
-        for k, v in ipairs(G.hand.cards) do
-            if SMODS.has_enhancement(v, "m_glass") then
-                table.insert(glass, v)
-            end
-        end
-        for i = 1, #glass do
-            local percent = 1.15 - (i - 0.999) / (#glass - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    glass[i]:flip(); play_sound('card1', percent); glass[i]:juice_up(0.3, 0.3); return true
-                end
-            }))
-        end
-        delay(0.2)
-        for i = 1, #glass do
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.1,
-                func = function()
-                    copy_card(lucky, glass[i])
-                    return true
-                end
-            }))
-        end
-        for i = 1, #glass do
-            local percent = 0.85 + (i - 0.999) / (#glass - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    glass[i]:flip(); play_sound('tarot2', percent, 0.6); glass[i]:juice_up(0.3, 0.3); return true
-                end
-            }))
-        end
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.2,
-            func = function()
-                G.hand:unhighlight_all(); return true
-            end
-        }))
-        delay(0.5)
     end,
 })
 SMODS.Consumable({
