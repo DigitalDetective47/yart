@@ -1081,38 +1081,21 @@ SMODS.Consumable({
     set = "Tarot",
     pos = { x = 3, y = 2 },
     atlas = "rtarots",
-    config = { cost = 2, increase = 1.5 },
+    config = { extra = 25, factor = 1 },
     loc_vars = function(self, info_queue, card)
-        local total = 0
-        if G.jokers and G.jokers.cards then
-            for k, v in ipairs(G.jokers.cards) do
-                total = total + v.sell_cost
-            end
-        end
-        return { vars = { card.ability.cost, card.ability.cost * total, card.ability.increase } }
+        return { vars = { G.GAME.consumeable_usage_total and math.max(G.GAME.consumeable_usage_total.all * card.ability.factor, card.ability.extra) or 0, card.ability.factor, card.ability.extra } }
     end,
     can_use = function(self, card)
-        local total = 0
-        for k, v in ipairs(G.jokers.cards) do
-            total = total + v.sell_cost
-        end
-        return #G.jokers.cards > 0 and StrangeLib.safe_compare(G.GAME.dollars - card.ability.cost * total -
-            ((card.area == G.shop_jokers or card.area == G.shop_booster or card.area == G.shop_vouchers) and card.cost or 0),
-            ">=", G.GAME.bankrupt_at)
+        return true
     end,
     use = function(self, card, area, copier)
-        local total = 0
-        for k, v in ipairs(G.jokers.cards) do
-            total = total + v.sell_cost
-            v.ability.extra_value = (v.ability.extra_value or 0) + v.sell_cost * (card.ability.increase - 1)
-            v:set_cost()
-        end
         G.E_MANAGER:add_event(Event({
-            trigger = 'after',
+            trigger = "after",
             delay = 0.4,
             func = function()
+                play_sound("timpani")
                 card:juice_up(0.3, 0.5)
-                ease_dollars(-(card.ability.cost * total), true)
+                ease_dollars(math.max(G.GAME.consumeable_usage_total.all * card.ability.factor, card.ability.extra), true)
                 return true
             end
         }))
