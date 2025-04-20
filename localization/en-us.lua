@@ -61,10 +61,11 @@ return {
             c_yart_rchariot = {
                 name = "toirahC ehT",
                 text = {
-                    "Converts all held",
-                    "{C:attention}Gold Cards{} to a",
-                    "random {C:attention}Steel Card{}",
-                    "held in hand",
+                    "Convert a random card",
+                    "held in hand to",
+                    "{C:attention}Steel{} for each",
+                    "hand size above #1#",
+                    "{C:inactive}(Currently {C:attention}#2#{C:inactive})",
                 }
             },
             c_yart_rjustice = {

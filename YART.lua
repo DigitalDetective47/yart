@@ -580,86 +580,42 @@ SMODS.Consumable({
     set = "Tarot",
     pos = { x = 2, y = 1 },
     atlas = "rtarots",
+    config = { extra = get_starting_params().hand_size },
+    set_ability = function(self, card, initial, delay_sprites)
+        card.ability.extra = G.GAME and G.GAME.starting_params.hand_size or self.config.extra
+    end,
     loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_CENTERS.m_steel)
-        table.insert(info_queue, G.P_CENTERS.m_gold)
+        return { vars = { card.ability.extra, G.hand and math.max(G.hand.config.card_limit - card.ability.extra, 0) or 0 } }
     end,
     can_use = function(self, card)
-        local has_gold = false
-        local has_steel = false
-        if G.hand and G.hand.cards then
-            for k, v in ipairs(G.hand.cards) do
-                if SMODS.has_enhancement(v, "m_gold") then
-                    has_gold = true
-                elseif SMODS.has_enhancement(v, "m_steel") then
-                    has_steel = true
-                end
-            end
-        end
-        return has_gold and has_steel
+        return #G.hand.cards > 0 and G.hand.config.card_limit > card.ability.extra
     end,
     use = function(self, card, area, copier)
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.4,
-            func = function()
-                play_sound('tarot1')
-                card:juice_up(0.3, 0.5)
-                return true
-            end
-        }))
-        local steel = {}
-        for k, v in ipairs(G.hand.cards) do
-            if SMODS.has_enhancement(v, "m_steel") then
-                table.insert(steel, v)
-            end
+        local targets = {}
+        local valid_targets = {}
+        for i, hand_card in ipairs(G.hand.cards) do
+            valid_targets[i] = hand_card
         end
-        steel = pseudorandom_element(steel, pseudoseed('rchariot'))
-        local gold = {}
-        for k, v in ipairs(G.hand.cards) do
-            if SMODS.has_enhancement(v, "m_gold") then
-                table.insert(gold, v)
-            end
-        end
-        for i = 1, #gold do
-            local percent = 1.15 - (i - 0.999) / (#gold - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    gold[i]:flip(); play_sound('card1', percent); gold[i]:juice_up(0.3, 0.3); return true
+        for _ = 1, G.hand.config.card_limit - card.ability.extra do
+            local new_target = pseudorandom_element(valid_targets, pseudoseed("rchariot"))
+            targets[new_target] = true
+            for i, held_card in ipairs(valid_targets) do
+                if held_card == new_target then
+                    table.remove(valid_targets, i)
+                    break
                 end
-            }))
-        end
-        delay(0.2)
-        for i = 1, #gold do
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.1,
-                func = function()
-                    copy_card(steel, gold[i])
-                    return true
-                end
-            }))
-        end
-        for i = 1, #gold do
-            local percent = 0.85 + (i - 0.999) / (#gold - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    gold[i]:flip(); play_sound('tarot2', percent, 0.6); gold[i]:juice_up(0.3, 0.3); return true
-                end
-            }))
-        end
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.2,
-            func = function()
-                G.hand:unhighlight_all(); return true
             end
-        }))
-        delay(0.5)
+        end
+        local modification_list = {}
+        for _, hand_card in ipairs(G.hand.cards) do
+            if targets[hand_card] then
+                table.insert(modification_list, hand_card)
+            end
+        end
+        modify_cards(modification_list, function(target)
+            target:set_ability(G.P_CENTERS.m_steel)
+        end)
     end,
 })
 SMODS.Consumable({
