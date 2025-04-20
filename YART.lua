@@ -757,8 +757,11 @@ SMODS.Consumable({
     loc_vars = function(self, info_queue, card)
         return { vars = { G.GAME.last_cash_out or G.GAME.starting_params.dollars } }
     end,
+    in_pool = function(self, args)
+        return G.GAME.last_cash_out ~= nil
+    end,
     can_use = function(self, card)
-        return true
+        return G.GAME.last_cash_out ~= nil
     end,
     can_bulk_use = true,
     use = function(self, card, area, copier)
@@ -768,7 +771,7 @@ SMODS.Consumable({
             func = function()
                 play_sound("timpani")
                 card:juice_up(0.3, 0.5)
-                ease_dollars(G.GAME.last_cash_out or G.GAME.starting_params.dollars, true)
+                ease_dollars(G.GAME.last_cash_out, true)
                 return true
             end
         }))
@@ -781,7 +784,7 @@ SMODS.Consumable({
             func = function()
                 play_sound("timpani")
                 card:juice_up(0.3, 0.5)
-                ease_dollars((G.GAME.last_cash_out or G.GAME.starting_params.dollars) * number, true)
+                ease_dollars(G.GAME.last_cash_out * number, true)
                 return true
             end
         }))

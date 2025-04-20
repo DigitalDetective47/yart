@@ -81,8 +81,6 @@ return {
                 text = {
                     "Gives the amount of",
                     "your last cash out",
-                    "{C:inactive}(Uses starting money if",
-                    "{C:inactive}used before first cash out)",
                     "{C:inactive}(Currently {C:money}$#1#{C:inactive})"
                 }
             },
