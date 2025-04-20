@@ -516,7 +516,7 @@ SMODS.Consumable({
         for i, hand_card in ipairs(G.hand.cards) do
             valid_targets[i] = hand_card
         end
-        for _ = 1, G.hand.config.card_limit - card.ability.extra do
+        for _ = 1, math.min(G.hand.config.card_limit - card.ability.extra, #G.hand.cards) do
             local new_target = pseudorandom_element(valid_targets, pseudoseed("rchariot"))
             targets[new_target] = true
             for i, held_card in ipairs(valid_targets) do
