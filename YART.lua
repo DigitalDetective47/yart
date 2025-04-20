@@ -117,29 +117,36 @@ SMODS.Consumable({
     pos = { x = 0, y = 0 },
     atlas = "rtarots",
     loc_vars = function(self, info_queue, card)
-        local fool_c = G.GAME.yart_last_other and G.P_CENTERS[G.GAME.yart_last_other] or nil
-        local yart_last_other = fool_c and localize { type = 'name_text', key = fool_c.key, set = fool_c.set } or
-            localize('k_none')
-        local colour = (not fool_c) and G.C.RED or G.C.GREEN
-        main_end = {
-            {
-                n = G.UIT.C,
-                config = { align = "bm", padding = 0.02 },
-                nodes = {
-                    {
-                        n = G.UIT.C,
-                        config = { align = "m", colour = colour, r = 0.05, padding = 0.05 },
-                        nodes = {
-                            { n = G.UIT.T, config = { text = ' ' .. yart_last_other .. ' ', colour = G.C.UI.TEXT_LIGHT, scale = 0.3, shadow = true } },
+        if G.GAME.yart_last_other then
+            table.insert(info_queue, G.P_CENTERS[G.GAME.yart_last_other])
+        end
+        return {
+            main_end = {
+                {
+                    n = G.UIT.C,
+                    config = { align = "bm", padding = 0.02 },
+                    nodes = {
+                        {
+                            n = G.UIT.C,
+                            config = { align = "m", colour = G.GAME.yart_last_other and G.C.GREEN or G.C.RED, r = 0.05, padding = 0.05 },
+                            nodes = {
+                                {
+                                    n = G.UIT.T,
+                                    config = {
+                                        text = " " ..
+                                            (G.GAME.yart_last_other and localize { type = "name_text", key = G.GAME.yart_last_other, set = G.P_CENTERS[G.GAME.yart_last_other].set } or localize("k_none"))
+                                            .. " ",
+                                        colour = G.C.UI.TEXT_LIGHT,
+                                        scale = 0.3,
+                                        shadow = true
+                                    }
+                                },
+                            }
                         }
                     }
                 }
             }
         }
-        if fool_c then
-            table.insert(info_queue, fool_c)
-        end
-        return { main_end = main_end }
     end,
     can_use = function(self, card)
         return (#G.consumeables.cards < G.consumeables.config.card_limit or card.area == G.consumeables)
@@ -151,9 +158,7 @@ SMODS.Consumable({
             delay = 0.4,
             func = function()
                 play_sound('timpani')
-                local new = create_card(nil, G.consumeables, nil, nil, nil, nil, G.GAME.yart_last_other)
-                new:add_to_deck()
-                G.consumeables:emplace(new)
+                SMODS.add_card({ key = G.GAME.yart_last_other })
                 card:juice_up(0.3, 0.5)
                 return true
             end
@@ -980,7 +985,7 @@ SMODS.Consumable({
                 play_sound("timpani")
                 card:juice_up(0.3, 0.5)
                 ease_dollars(
-                math.max(G.GAME.consumeable_usage_total.all * card.ability.factor, card.ability.extra) * number, true)
+                    math.max(G.GAME.consumeable_usage_total.all * card.ability.factor, card.ability.extra) * number, true)
                 return true
             end
         }))
