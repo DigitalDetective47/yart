@@ -1044,6 +1044,7 @@ SMODS.Consumable({
     can_use = function(self, card)
         return true
     end,
+    can_bulk_use = true,
     use = function(self, card, area, copier)
         G.E_MANAGER:add_event(Event({
             trigger = "after",
@@ -1052,6 +1053,20 @@ SMODS.Consumable({
                 play_sound("timpani")
                 card:juice_up(0.3, 0.5)
                 ease_dollars(math.max(G.GAME.consumeable_usage_total.all * card.ability.factor, card.ability.extra), true)
+                return true
+            end
+        }))
+        delay(0.6)
+    end,
+    bulk_use = function(self, card, area, copier, number)
+        G.E_MANAGER:add_event(Event({
+            trigger = "after",
+            delay = 0.4,
+            func = function()
+                play_sound("timpani")
+                card:juice_up(0.3, 0.5)
+                ease_dollars(
+                math.max(G.GAME.consumeable_usage_total.all * card.ability.factor, card.ability.extra) * number, true)
                 return true
             end
         }))
