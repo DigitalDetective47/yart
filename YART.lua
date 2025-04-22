@@ -511,25 +511,33 @@ SMODS.Consumable({
         return #G.hand.cards > 0 and G.hand.config.card_limit > card.ability.extra
     end,
     use = function(self, card, area, copier)
-        local targets = {}
-        local valid_targets = {}
-        for i, hand_card in ipairs(G.hand.cards) do
-            valid_targets[i] = hand_card
-        end
-        for _ = 1, math.min(G.hand.config.card_limit - card.ability.extra, #G.hand.cards) do
-            local new_target = pseudorandom_element(valid_targets, pseudoseed("rchariot"))
-            targets[new_target] = true
-            for i, held_card in ipairs(valid_targets) do
-                if held_card == new_target then
-                    table.remove(valid_targets, i)
-                    break
+        local modification_list
+        if #G.hand.cards < G.hand.config.card_limit - card.ability.extra then
+            modification_list = G.hand.cards
+            for _ = 1, #G.hand.cards do
+                pseudoseed("rchariot")
+            end
+        else
+            modification_list = {}
+            local targets = {}
+            local valid_targets = {}
+            for i, hand_card in ipairs(G.hand.cards) do
+                valid_targets[i] = hand_card
+            end
+            for _ = 1, G.hand.config.card_limit - card.ability.extra do
+                local new_target = pseudorandom_element(valid_targets, pseudoseed("rchariot"))
+                targets[new_target] = true
+                for i, held_card in ipairs(valid_targets) do
+                    if held_card == new_target then
+                        table.remove(valid_targets, i)
+                        break
+                    end
                 end
             end
-        end
-        local modification_list = {}
-        for _, hand_card in ipairs(G.hand.cards) do
-            if targets[hand_card] then
-                table.insert(modification_list, hand_card)
+            for _, hand_card in ipairs(G.hand.cards) do
+                if targets[hand_card] then
+                    table.insert(modification_list, hand_card)
+                end
             end
         end
         modify_cards(modification_list, function(target)
