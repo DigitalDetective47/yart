@@ -152,7 +152,7 @@ SMODS.Consumable({
         return (#G.consumeables.cards < G.consumeables.config.card_limit or card.area == G.consumeables)
             and G.GAME.yart_last_other
     end,
-    use = function(self, card, area, copier)
+    use = function(self, card, area)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.4,
@@ -179,7 +179,7 @@ SMODS.Consumable({
     can_use = function(self, card)
         return #G.hand.cards ~= 0
     end,
-    use = function(self, card, area, copier)
+    use = function(self, card, area)
         if pseudorandom('rmagician') < G.GAME.probabilities.normal / card.ability.chance then
             modify_cards(G.hand.cards, function(target)
                 target:set_ability(G.P_CENTERS.m_lucky)
@@ -203,7 +203,7 @@ SMODS.Consumable({
         return true
     end,
     can_bulk_use = true,
-    use = function(self, card, area, copier)
+    use = function(self, card, area)
         if pseudorandom('rhigh_priestess') < G.GAME.probabilities.normal / card.ability.chance then
             add_tag(Tag("tag_meteor"))
         else
@@ -234,7 +234,7 @@ SMODS.Consumable({
         end
         return has_bonus and has_mult
     end,
-    use = function(self, card, area, copier)
+    use = function(self, card, area)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.4,
@@ -312,7 +312,7 @@ SMODS.Consumable({
         return true
     end,
     can_bulk_use = true,
-    use = function(self, card, area, copier)
+    use = function(self, card, area)
         if pseudorandom('remperor') < G.GAME.probabilities.normal / card.ability.chance then
             add_tag(Tag("tag_charm"))
         else
@@ -343,7 +343,7 @@ SMODS.Consumable({
         end
         return has_mult and has_bonus
     end,
-    use = function(self, card, area, copier)
+    use = function(self, card, area)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.4,
@@ -430,7 +430,7 @@ SMODS.Consumable({
         end
         return has_stone and has_wild
     end,
-    use = function(self, card, area, copier)
+    use = function(self, card, area)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.4,
@@ -510,7 +510,7 @@ SMODS.Consumable({
     can_use = function(self, card)
         return #G.hand.cards > 0 and G.hand.config.card_limit > card.ability.extra
     end,
-    use = function(self, card, area, copier)
+    use = function(self, card, area)
         local modification_list
         if #G.hand.cards < G.hand.config.card_limit - card.ability.extra then
             modification_list = G.hand.cards
@@ -568,7 +568,7 @@ SMODS.Consumable({
         end
         return has_lucky and has_glass
     end,
-    use = function(self, card, area, copier)
+    use = function(self, card, area)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.4,
@@ -647,7 +647,7 @@ SMODS.Consumable({
         return G.GAME.last_cash_out ~= nil
     end,
     can_bulk_use = true,
-    use = function(self, card, area, copier)
+    use = function(self, card, area)
         G.E_MANAGER:add_event(Event({
             trigger = "after",
             delay = 0.4,
@@ -660,7 +660,7 @@ SMODS.Consumable({
         }))
         delay(0.6)
     end,
-    bulk_use = function(self, card, area, copier, number)
+    bulk_use = function(self, card, area, number)
         G.E_MANAGER:add_event(Event({
             trigger = "after",
             delay = 0.4,
@@ -691,7 +691,7 @@ SMODS.Consumable({
             end
         end
     end,
-    use = function(self, card, area, copier)
+    use = function(self, card, area)
         if pseudorandom('rwheel_of_fortune') < G.GAME.probabilities.normal / card.ability.chance then
             local pool = {}
             for k, v in pairs(G.jokers.cards) do
@@ -743,7 +743,7 @@ SMODS.Consumable({
     can_use = function(self, card)
         return #G.hand.highlighted > 0 and #G.hand.highlighted <= card.ability.limit
     end,
-    use = function(self, card, area, copier)
+    use = function(self, card, area)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.4,
@@ -810,7 +810,7 @@ SMODS.Consumable({
     can_use = function(self, card)
         return #G.hand.cards > 0
     end,
-    use = function(self, card, area, copier)
+    use = function(self, card, area)
         local destroy = {}
         if pseudorandom('rhanged_man') < 0.5 then
             for k, v in ipairs(G.hand.highlighted) do
@@ -889,7 +889,7 @@ SMODS.Consumable({
                 ((card.area == G.shop_jokers or card.area == G.shop_booster or card.area == G.shop_vouchers) and card.cost or 0),
                 ">=", G.GAME.bankrupt_at)
     end,
-    use = function(self, card, area, copier)
+    use = function(self, card, area)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.4,
@@ -972,7 +972,7 @@ SMODS.Consumable({
         return true
     end,
     can_bulk_use = true,
-    use = function(self, card, area, copier)
+    use = function(self, card, area)
         G.E_MANAGER:add_event(Event({
             trigger = "after",
             delay = 0.4,
@@ -985,7 +985,7 @@ SMODS.Consumable({
         }))
         delay(0.6)
     end,
-    bulk_use = function(self, card, area, copier, number)
+    bulk_use = function(self, card, area, number)
         G.E_MANAGER:add_event(Event({
             trigger = "after",
             delay = 0.4,
@@ -1023,7 +1023,7 @@ SMODS.Consumable({
         end
         return has_steel and has_gold
     end,
-    use = function(self, card, area, copier)
+    use = function(self, card, area)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.4,
@@ -1110,7 +1110,7 @@ SMODS.Consumable({
         end
         return has_wild and has_stone
     end,
-    use = function(self, card, area, copier)
+    use = function(self, card, area)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.4,
@@ -1192,7 +1192,7 @@ SMODS.Consumable({
         end
         return false
     end,
-    use = function(self, card, area, copier)
+    use = function(self, card, area)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.4,
@@ -1267,7 +1267,7 @@ SMODS.Consumable({
         end
         return false
     end,
-    use = function(self, card, area, copier)
+    use = function(self, card, area)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.4,
@@ -1342,7 +1342,7 @@ SMODS.Consumable({
         end
         return false
     end,
-    use = function(self, card, area, copier)
+    use = function(self, card, area)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.4,
@@ -1413,7 +1413,7 @@ SMODS.Consumable({
         return true
     end,
     can_bulk_use = true,
-    use = function(self, card, area, copier)
+    use = function(self, card, area)
         if pseudorandom('rjudgement') < G.GAME.probabilities.normal / card.ability.chance then
             add_tag(Tag("tag_buffoon"))
         else
@@ -1439,7 +1439,7 @@ SMODS.Consumable({
         end
         return false
     end,
-    use = function(self, card, area, copier)
+    use = function(self, card, area)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.4,
