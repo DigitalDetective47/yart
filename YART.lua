@@ -54,7 +54,7 @@ local function modify_cards(targets, modification)
     delay(0.5)
 end
 
----@class Colour { r: number, g: number, b: number, a: number }
+---@class Colour [number, number, number, number]
 
 ---@param card Card
 ---@param colour Colour
