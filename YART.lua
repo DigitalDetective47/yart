@@ -511,6 +511,7 @@ SMODS.Consumable({
         return #G.hand.cards > 0 and G.hand.config.card_limit > card.ability.extra
     end,
     use = function(self, card, area)
+        ---@type Card[]
         local modification_list
         if #G.hand.cards < G.hand.config.card_limit - card.ability.extra then
             modification_list = G.hand.cards
@@ -519,13 +520,16 @@ SMODS.Consumable({
             end
         else
             modification_list = {}
+            ---@type table<Card, true>
             local targets = {}
+            ---@type Card[]
             local valid_targets = {}
             for i, hand_card in ipairs(G.hand.cards) do
                 valid_targets[i] = hand_card
             end
             for _ = 1, G.hand.config.card_limit - card.ability.extra do
-                local new_target = pseudorandom_element(valid_targets, pseudoseed("rchariot"))
+                ---@type Card
+                local new_target = pseudorandom_element(valid_targets, pseudoseed("rchariot")) --[[@as Card]]
                 targets[new_target] = true
                 for i, held_card in ipairs(valid_targets) do
                     if held_card == new_target then
@@ -693,13 +697,15 @@ SMODS.Consumable({
     end,
     use = function(self, card, area)
         if pseudorandom('rwheel_of_fortune') < G.GAME.probabilities.normal / card.ability.chance then
+            ---@type Card[]
             local pool = {}
             for k, v in pairs(G.jokers.cards) do
                 if v.ability.set == 'Joker' and (not v.edition) then
                     table.insert(pool, v)
                 end
             end
-            local selected = pseudorandom_element(pool, pseudoseed("rwheel_of_fortune"))
+            ---@type Card
+            local selected = pseudorandom_element(pool, pseudoseed("rwheel_of_fortune")) --[[@as Card]]
             G.E_MANAGER:add_event(Event({
                 trigger = 'after',
                 delay = 0.4,
@@ -710,6 +716,7 @@ SMODS.Consumable({
                 end
             }))
         else
+            ---@type Card[]
             local pool = {}
             for k, v in pairs(G.jokers.cards) do
                 if v.ability.set == 'Joker' and (not v.ability.eternal) then
@@ -717,7 +724,8 @@ SMODS.Consumable({
                 end
             end
             if #pool ~= 0 then
-                local selected = pseudorandom_element(pool, pseudoseed("rwheel_of_fortune"))
+                ---@type Card
+                local selected = pseudorandom_element(pool, pseudoseed("rwheel_of_fortune")) --[[@as Card]]
                 G.E_MANAGER:add_event(Event({
                     trigger = 'after',
                     delay = 0.4,
@@ -753,53 +761,19 @@ SMODS.Consumable({
                 return true
             end
         }))
-        for i = 1, #G.hand.highlighted do
-            local percent = 1.15 - (i - 0.999) / (#G.hand.highlighted - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    G.hand.highlighted[i]:flip(); play_sound('card1', percent); G.hand.highlighted[i]:juice_up(0.3, 0.3); return true
-                end
-            }))
-        end
-        local rank = {}
+        ---@type string[]
+        local ranks = {}
         for k, v in ipairs(G.playing_cards) do
             if not SMODS.has_no_rank(v) then
-                table.insert(rank, v.base.value)
+                table.insert(ranks, v.base.value)
             end
         end
-        rank = pseudorandom_element(rank, pseudoseed('rStrength'))
+        ---@type string
+        local rank = pseudorandom_element(ranks, pseudoseed('rStrength')) --[[@as string]]
         delay(0.2)
-        for k, v in ipairs(G.hand.highlighted) do
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.1,
-                func = function()
-                    SMODS.change_base(v, nil, rank)
-                    return true
-                end
-            }))
-        end
-        for i = 1, #G.hand.highlighted do
-            local percent = 0.85 + (i - 0.999) / (#G.hand.highlighted - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    G.hand.highlighted[i]:flip(); play_sound('tarot2', percent, 0.6); G.hand.highlighted[i]:juice_up(0.3,
-                        0.3); return true
-                end
-            }))
-        end
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.2,
-            func = function()
-                G.hand:unhighlight_all(); return true
-            end
-        }))
-        delay(0.5)
+        modify_cards(G.hand.highlighted, function(target)
+            SMODS.change_base(target, nil, rank)
+        end)
     end,
 })
 SMODS.Consumable({
@@ -811,6 +785,7 @@ SMODS.Consumable({
         return #G.hand.cards > 0
     end,
     use = function(self, card, area)
+        ---@type Card[]
         local destroy = {}
         if pseudorandom('rhanged_man') < 0.5 then
             for k, v in ipairs(G.hand.highlighted) do
@@ -818,6 +793,7 @@ SMODS.Consumable({
             end
         else
             for k, v in ipairs(G.hand.cards) do
+                ---@type boolean
                 local highlighted = false
                 for hk, hv in ipairs(G.hand.highlighted) do
                     if v == hv then
@@ -1202,51 +1178,16 @@ SMODS.Consumable({
                 return true
             end
         }))
+        ---@type Card[]
         local diamonds = {}
         for k, v in ipairs(G.hand.cards) do
             if v:is_suit("Diamonds") then
                 table.insert(diamonds, v)
             end
         end
-        for i = 1, #diamonds do
-            local percent = 1.15 - (i - 0.999) / (#diamonds - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    diamonds[i]:flip(); play_sound('card1', percent); diamonds[i]:juice_up(0.3, 0.3); return true
-                end
-            }))
-        end
-        delay(0.2)
-        for i = 1, #diamonds do
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.1,
-                func = function()
-                    diamonds[i]:set_ability(G.P_CENTERS.m_gold)
-                    return true
-                end
-            }))
-        end
-        for i = 1, #diamonds do
-            local percent = 0.85 + (i - 0.999) / (#diamonds - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    diamonds[i]:flip(); play_sound('tarot2', percent, 0.6); diamonds[i]:juice_up(0.3, 0.3); return true
-                end
-            }))
-        end
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.2,
-            func = function()
-                G.hand:unhighlight_all(); return true
-            end
-        }))
-        delay(0.5)
+        modify_cards(diamonds, function(target)
+            target:set_ability(G.P_CENTERS.m_gold)
+        end)
     end,
 })
 SMODS.Consumable({
@@ -1277,51 +1218,16 @@ SMODS.Consumable({
                 return true
             end
         }))
+        ---@type Card[]
         local clubs = {}
         for k, v in ipairs(G.hand.cards) do
             if v:is_suit("Clubs") then
                 table.insert(clubs, v)
             end
         end
-        for i = 1, #clubs do
-            local percent = 1.15 - (i - 0.999) / (#clubs - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    clubs[i]:flip(); play_sound('card1', percent); clubs[i]:juice_up(0.3, 0.3); return true
-                end
-            }))
-        end
-        delay(0.2)
-        for i = 1, #clubs do
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.1,
-                func = function()
-                    clubs[i]:set_ability(G.P_CENTERS.m_mult)
-                    return true
-                end
-            }))
-        end
-        for i = 1, #clubs do
-            local percent = 0.85 + (i - 0.999) / (#clubs - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    clubs[i]:flip(); play_sound('tarot2', percent, 0.6); clubs[i]:juice_up(0.3, 0.3); return true
-                end
-            }))
-        end
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.2,
-            func = function()
-                G.hand:unhighlight_all(); return true
-            end
-        }))
-        delay(0.5)
+        modify_cards(clubs, function(target)
+            target:set_ability(G.P_CENTERS.m_mult)
+        end)
     end,
 })
 SMODS.Consumable({
@@ -1352,51 +1258,16 @@ SMODS.Consumable({
                 return true
             end
         }))
+        ---@type Card[]
         local hearts = {}
         for k, v in ipairs(G.hand.cards) do
             if v:is_suit("Hearts") then
                 table.insert(hearts, v)
             end
         end
-        for i = 1, #hearts do
-            local percent = 1.15 - (i - 0.999) / (#hearts - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    hearts[i]:flip(); play_sound('card1', percent); hearts[i]:juice_up(0.3, 0.3); return true
-                end
-            }))
-        end
-        delay(0.2)
-        for i = 1, #hearts do
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.1,
-                func = function()
-                    hearts[i]:set_ability(G.P_CENTERS.m_glass)
-                    return true
-                end
-            }))
-        end
-        for i = 1, #hearts do
-            local percent = 0.85 + (i - 0.999) / (#hearts - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    hearts[i]:flip(); play_sound('tarot2', percent, 0.6); hearts[i]:juice_up(0.3, 0.3); return true
-                end
-            }))
-        end
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.2,
-            func = function()
-                G.hand:unhighlight_all(); return true
-            end
-        }))
-        delay(0.5)
+        modify_cards(hearts, function(target)
+            target:set_ability(G.P_CENTERS.m_glass)
+        end)
     end,
 })
 SMODS.Consumable({
@@ -1449,51 +1320,16 @@ SMODS.Consumable({
                 return true
             end
         }))
+        ---@type Card[]
         local spades = {}
         for k, v in ipairs(G.hand.cards) do
             if v:is_suit("Spades") then
                 table.insert(spades, v)
             end
         end
-        for i = 1, #spades do
-            local percent = 1.15 - (i - 0.999) / (#spades - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    spades[i]:flip(); play_sound('card1', percent); spades[i]:juice_up(0.3, 0.3); return true
-                end
-            }))
-        end
-        delay(0.2)
-        for i = 1, #spades do
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.1,
-                func = function()
-                    spades[i]:set_ability(G.P_CENTERS.m_bonus)
-                    return true
-                end
-            }))
-        end
-        for i = 1, #spades do
-            local percent = 0.85 + (i - 0.999) / (#spades - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    spades[i]:flip(); play_sound('tarot2', percent, 0.6); spades[i]:juice_up(0.3, 0.3); return true
-                end
-            }))
-        end
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.2,
-            func = function()
-                G.hand:unhighlight_all(); return true
-            end
-        }))
-        delay(0.5)
+        modify_cards(spades, function(target)
+            target:set_ability(G.P_CENTERS.m_bonus)
+        end)
     end,
 })
 
