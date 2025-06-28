@@ -14,7 +14,7 @@ return {
                 text = {
                     "{C:green}#1# in #2#{} chance to",
                     "convert entire hand",
-                    "into {C:attention}Lucky Cards{}",
+                    "into {C:attention}Lucky Cards",
                 }
             },
             c_yart_rhigh_priestess = {
@@ -29,7 +29,7 @@ return {
                 text = {
                     "Converts all held",
                     "{C:attention}Bonus Cards{} to a",
-                    "random {C:attention}Mult Card{}",
+                    "random {C:attention}Mult Card",
                     "held in hand",
                 }
             },
@@ -54,7 +54,7 @@ return {
                 text = {
                     "Converts all held",
                     "{C:attention}Stone Cards{} to a",
-                    "random {C:attention}Wild Card{}",
+                    "random {C:attention}Wild Card",
                     "held in hand",
                 }
             },
@@ -73,7 +73,7 @@ return {
                 text = {
                     "Converts all held",
                     "{C:attention}Lucky Cards{} to a",
-                    "random {C:attention}Glass Card{}",
+                    "random {C:attention}Glass Card",
                     "held in hand",
                 }
             },
@@ -88,7 +88,7 @@ return {
             c_yart_rwheel_of_fortune = {
                 name = "enutroF fo leehW ehT",
                 text = {
-                    "{C:green}#1# in #2#{} chance to add {C:dark_edition}Negative{}",
+                    "{C:green}#1# in #2#{} chance to add {C:dark_edition}Negative",
                     "to a random {C:attention}Joker",
                     "Otherwise, destroy a",
                     "random {C:attention}Joker",
@@ -138,7 +138,7 @@ return {
                 text = {
                     "Converts all held",
                     "{C:attention}Steel Cards{} to a",
-                    "random {C:attention}Gold Card{}",
+                    "random {C:attention}Gold Card",
                     "held in hand",
                 }
             },
@@ -147,7 +147,7 @@ return {
                 text = {
                     "Converts all held",
                     "{C:attention}Wild Cards{} to a",
-                    "random {C:attention}Stone Card{}",
+                    "random {C:attention}Stone Card",
                     "held in hand",
                 }
             },
@@ -156,7 +156,7 @@ return {
                 text = {
                     "Converts all held",
                     "{C:diamonds}Diamond{} cards to",
-                    "{C:attention}Gold Cards{}",
+                    "{C:attention}Gold Cards",
                 }
             },
             c_yart_rmoon = {
@@ -164,7 +164,7 @@ return {
                 text = {
                     "Converts all held",
                     "{C:clubs}Club{} cards to",
-                    "{C:attention}Mult Cards{}",
+                    "{C:attention}Mult Cards",
                 }
             },
             c_yart_rsun = {
@@ -172,7 +172,7 @@ return {
                 text = {
                     "Converts all held",
                     "{C:hearts}Heart{} cards to",
-                    "{C:attention}Glass Cards{}",
+                    "{C:attention}Glass Cards",
                 }
             },
             c_yart_rjudgement = {
@@ -187,7 +187,7 @@ return {
                 text = {
                     "Converts all held",
                     "{C:spades}Spade{} cards to",
-                    "{C:attention}Bonus Cards{}",
+                    "{C:attention}Bonus Cards",
                 }
             },
         },
