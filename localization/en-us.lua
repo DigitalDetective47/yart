@@ -44,9 +44,9 @@ return {
                 name = "tnahporeiH ehT",
                 text = {
                     "Converts all held",
-                    "{C:attention}Mult Cards{} to a",
-                    "random {C:attention}Bonus Card{}",
-                    "held in hand",
+                    "cards giving {C:chips}+#1#{} Chips",
+                    "or less into",
+                    "{C:attention}Bonus Cards"
                 }
             },
             c_yart_rlovers = {

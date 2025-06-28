@@ -339,86 +339,30 @@ SMODS.Consumable({
     set = "Tarot",
     pos = { x = 0, y = 1 },
     atlas = "rtarots",
+    config = { threshold = 5 },
     loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_CENTERS.m_bonus)
-        table.insert(info_queue, G.P_CENTERS.m_mult)
+        return { vars = { card.ability.threshold } }
     end,
     can_use = function(self, card)
-        local has_mult = false
-        local has_bonus = false
-        if G.hand and G.hand.cards then
-            for k, v in ipairs(G.hand.cards) do
-                if SMODS.has_enhancement(v, "m_mult") then
-                    has_mult = true
-                elseif SMODS.has_enhancement(v, "m_bonus") then
-                    has_bonus = true
-                end
-            end
-        end
-        return has_mult and has_bonus
-    end,
-    use = function(self, card, area)
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.4,
-            func = function()
-                play_sound('tarot1')
-                card:juice_up(0.3, 0.5)
+        for _, other in ipairs(G.hand.cards) do
+            if other:get_chip_bonus() <= card.ability.threshold then
                 return true
             end
-        }))
-        local bonus = {}
-        for k, v in ipairs(G.hand.cards) do
-            if SMODS.has_enhancement(v, "m_bonus") then
-                table.insert(bonus, v)
+        end
+        return false
+    end,
+    use = function(self, card, area)
+        ---@type Card[]
+        local targets = {}
+        for _, other in ipairs(G.hand.cards) do
+            if other:get_chip_bonus() <= card.ability.threshold then
+                table.insert(targets, other)
             end
         end
-        bonus = pseudorandom_element(bonus, pseudoseed('rheirophant'))
-        local mult = {}
-        for k, v in ipairs(G.hand.cards) do
-            if SMODS.has_enhancement(v, "m_mult") then
-                table.insert(mult, v)
-            end
-        end
-        for i = 1, #mult do
-            local percent = 1.15 - (i - 0.999) / (#mult - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    mult[i]:flip(); play_sound('card1', percent); mult[i]:juice_up(0.3, 0.3); return true
-                end
-            }))
-        end
-        delay(0.2)
-        for i = 1, #mult do
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.1,
-                func = function()
-                    copy_card(bonus, mult[i])
-                    return true
-                end
-            }))
-        end
-        for i = 1, #mult do
-            local percent = 0.85 + (i - 0.999) / (#mult - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    mult[i]:flip(); play_sound('tarot2', percent, 0.6); mult[i]:juice_up(0.3, 0.3); return true
-                end
-            }))
-        end
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.2,
-            func = function()
-                G.hand:unhighlight_all(); return true
-            end
-        }))
-        delay(0.5)
+        modify_cards(targets, function(target)
+            target:set_ability(G.P_CENTERS.m_bonus)
+        end)
     end,
 })
 SMODS.Consumable({
