@@ -9,20 +9,34 @@ SMODS.Atlas({
 ---@param targets Card[]
 ---@param modification fun(card: Card): nil
 local function modify_cards(targets, modification)
-    for i, target in ipairs(targets) do
+    ---@type table<Card, true>
+    local hand_set = {}
+    for _, card in ipairs(G.hand.cards) do
+        hand_set[card] = true
+    end
+    ---@type Card[]
+    local hand_targets = {}
+    for _, target in ipairs(targets) do
+        if hand_set[target] then
+            table.insert(hand_targets, target)
+        else
+            modification(target)
+        end
+    end
+    for i, target in ipairs(hand_targets) do
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.15,
             func = function()
                 target:flip()
-                play_sound('card1', 1.15 - (i - 0.999) / (#targets - 0.998) * 0.3)
+                play_sound('card1', 1.15 - (i - 0.999) / (#hand_targets - 0.998) * 0.3)
                 target:juice_up(0.3, 0.3)
                 return true
             end
         }))
     end
     delay(0.2)
-    for i, target in ipairs(targets) do
+    for i, target in ipairs(hand_targets) do
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.1,
@@ -32,13 +46,13 @@ local function modify_cards(targets, modification)
             end
         }))
     end
-    for i, target in ipairs(targets) do
+    for i, target in ipairs(hand_targets) do
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.15,
             func = function()
                 target:flip()
-                play_sound('tarot2', 0.85 + (i - 0.999) / (#targets - 0.998) * 0.3, 0.6)
+                play_sound('tarot2', 0.85 + (i - 0.999) / (#hand_targets - 0.998) * 0.3, 0.6)
                 target:juice_up(0.3, 0.3)
                 return true
             end
