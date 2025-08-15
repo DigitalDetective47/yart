@@ -119,6 +119,14 @@ local function nope(card, colour)
     }))
 end
 
+---`can_use` function used by multiple reversed tarot cards
+---@param self SMODS.Consumable
+---@param card Card
+---@return boolean
+local function hand_not_empty(self, card)
+    return #G.hand.cards ~= 0
+end
+
 SMODS.Atlas({
     key = "rtarots",
     path = "tarot.png",
@@ -190,9 +198,7 @@ SMODS.Consumable({
         table.insert(info_queue, G.P_CENTERS.m_lucky)
         return { vars = { G.GAME.probabilities.normal, card.ability.chance } }
     end,
-    can_use = function(self, card)
-        return #G.hand.cards ~= 0
-    end,
+    can_use = hand_not_empty,
     use = function(self, card, area)
         if pseudorandom('rmagician') < G.GAME.probabilities.normal / card.ability.chance then
             modify_cards(G.hand.cards, function(target)
@@ -372,84 +378,44 @@ SMODS.Consumable({
     atlas = "rtarots",
     loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_CENTERS.m_wild)
-        table.insert(info_queue, G.P_CENTERS.m_stone)
     end,
-    can_use = function(self, card)
-        local has_stone = false
-        local has_wild = false
-        if G.hand and G.hand.cards then
-            for k, v in ipairs(G.hand.cards) do
-                if SMODS.has_enhancement(v, "m_stone") then
-                    has_stone = true
-                elseif SMODS.has_enhancement(v, "m_wild") then
-                    has_wild = true
-                end
-            end
-        end
-        return has_stone and has_wild
-    end,
+    can_use = hand_not_empty,
     use = function(self, card, area)
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.4,
-            func = function()
-                play_sound('tarot1')
-                card:juice_up(0.3, 0.5)
-                return true
-            end
-        }))
-        local wild = {}
-        for k, v in ipairs(G.hand.cards) do
-            if SMODS.has_enhancement(v, "m_wild") then
-                table.insert(wild, v)
-            end
-        end
-        wild = pseudorandom_element(wild, pseudoseed('rlovers'))
-        local stone = {}
-        for k, v in ipairs(G.hand.cards) do
-            if SMODS.has_enhancement(v, "m_stone") then
-                table.insert(stone, v)
-            end
-        end
-        for i = 1, #stone do
-            local percent = 1.15 - (i - 0.999) / (#stone - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    stone[i]:flip(); play_sound('card1', percent); stone[i]:juice_up(0.3, 0.3); return true
+        G.hand:unhighlight_all()
+        ---@type Card
+        local primary_target = pseudorandom_element(G.hand.cards, pseudoseed("rlovers")) --[[@as Card]]
+        G.hand:add_to_highlighted(primary_target, true)
+        ---@type Card[]
+        local targets = { primary_target }
+        if SMODS.has_any_suit(primary_target) then
+            for _, hand_card in ipairs(G.hand.cards) do
+                if hand_card ~= primary_target and not SMODS.has_no_suit(hand_card) then
+                    table.insert(targets, hand_card)
                 end
-            }))
-        end
-        delay(0.2)
-        for i = 1, #stone do
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.1,
-                func = function()
-                    copy_card(wild, stone[i])
-                    return true
-                end
-            }))
-        end
-        for i = 1, #stone do
-            local percent = 0.85 + (i - 0.999) / (#stone - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    stone[i]:flip(); play_sound('tarot2', percent, 0.6); stone[i]:juice_up(0.3, 0.3); return true
-                end
-            }))
-        end
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.2,
-            func = function()
-                G.hand:unhighlight_all(); return true
             end
-        }))
+        elseif not SMODS.has_no_suit(primary_target) then
+            ---@type { [string]: true }
+            local targeted_suits = {}
+            for suit, _ in pairs(SMODS.Suits) do
+                if primary_target:is_suit(suit) then
+                    targeted_suits[suit] = true
+                end
+            end
+            for _, hand_card in ipairs(G.hand.cards) do
+                if hand_card ~= primary_target then
+                    for suit, _ in pairs(targeted_suits) do
+                        if hand_card:is_suit(suit) then
+                            table.insert(targets, hand_card)
+                            break
+                        end
+                    end
+                end
+            end
+        end
         delay(0.5)
+        modify_cards(targets, function(target)
+            target:set_ability(G.P_CENTERS.m_wild)
+        end)
     end,
 })
 SMODS.Consumable({
@@ -739,9 +705,7 @@ SMODS.Consumable({
     set = "Tarot",
     pos = { x = 1, y = 2 },
     atlas = "rtarots",
-    can_use = function(self, card)
-        return #G.hand.cards > 0
-    end,
+    can_use = hand_not_empty,
     use = function(self, card, area)
         ---@type Card[]
         local destroy = {}

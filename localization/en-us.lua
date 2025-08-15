@@ -53,9 +53,9 @@ return {
                 name = "srevoL ehT",
                 text = {
                     "Converts all held",
-                    "{C:attention}Stone Cards{} to a",
-                    "random {C:attention}Wild Card",
-                    "held in hand",
+                    "cards with matching suit",
+                    "to a random held card",
+                    "into {C:attention}Wild Cards",
                 }
             },
             c_yart_rchariot = {
