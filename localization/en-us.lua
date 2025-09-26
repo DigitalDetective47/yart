@@ -71,10 +71,11 @@ return {
             c_yart_rjustice = {
                 name = "ecitsuJ",
                 text = {
-                    "Converts all held",
-                    "{C:attention}Lucky Cards{} to a",
-                    "random {C:attention}Glass Card",
-                    "held in hand",
+                    "Convert a random card",
+                    "held in hand to {C:attention}Glass",
+                    "for each power of",
+                    "#1# scored last round",
+                    "{C:inactive}(Currently {C:attention}#2#{C:inactive})",
                 }
             },
             c_yart_rhermit = {

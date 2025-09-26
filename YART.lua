@@ -473,91 +473,66 @@ SMODS.Consumable({
         end)
     end,
 })
+local cash_out_hook = G.FUNCS.cash_out
+function G.FUNCS.cash_out(e)
+    G.GAME.yart_last_round_score = G.GAME.chips
+    cash_out_hook(e)
+end
+
 SMODS.Consumable({
     key = "rjustice",
     set = "Tarot",
     pos = { x = 3, y = 1 },
     atlas = "rtarots",
+    config = { base = 100 },
     loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_CENTERS.m_glass)
-        table.insert(info_queue, G.P_CENTERS.m_lucky)
+        G.GAME.yart_last_round_score = G.GAME.yart_last_round_score or 1
+        return { vars = { card.ability.base, math.floor(card.ability.base == 100 and math.log10(G.GAME.yart_last_round_score) / 2 or math.log(G.GAME.yart_last_round_score, card.ability.base)) } }
     end,
     can_use = function(self, card)
-        local has_lucky = false
-        local has_glass = false
-        if G.hand and G.hand.cards then
-            for k, v in ipairs(G.hand.cards) do
-                if SMODS.has_enhancement(v, "m_lucky") then
-                    has_lucky = true
-                elseif SMODS.has_enhancement(v, "m_glass") then
-                    has_glass = true
-                end
-            end
-        end
-        return has_lucky and has_glass
+        return #G.hand.cards > 0 and G.GAME.yart_last_round_score >= card.ability.base
     end,
     use = function(self, card, area)
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.4,
-            func = function()
-                play_sound('tarot1')
-                card:juice_up(0.3, 0.5)
-                return true
+        ---@type integer
+        local modification_count = math.floor(card.ability.base == 100 and math.log10(G.GAME.yart_last_round_score) / 2 or
+            math.log(G.GAME.yart_last_round_score, card.ability.base))
+        ---@type Card[]
+        local modification_list
+        if #G.hand.cards < modification_count then
+            modification_list = G.hand.cards
+            for _ = 1, #G.hand.cards do
+                pseudoseed("rjustice")
             end
-        }))
-        local glass = {}
-        for k, v in ipairs(G.hand.cards) do
-            if SMODS.has_enhancement(v, "m_glass") then
-                table.insert(glass, v)
+        else
+            modification_list = {}
+            ---@type table<Card, true>
+            local targets = {}
+            ---@type Card[]
+            local valid_targets = {}
+            for i, hand_card in ipairs(G.hand.cards) do
+                valid_targets[i] = hand_card
             end
-        end
-        glass = pseudorandom_element(glass, pseudoseed('rjustice'))
-        local lucky = {}
-        for k, v in ipairs(G.hand.cards) do
-            if SMODS.has_enhancement(v, "m_lucky") then
-                table.insert(lucky, v)
-            end
-        end
-        for i = 1, #lucky do
-            local percent = 1.15 - (i - 0.999) / (#lucky - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    lucky[i]:flip(); play_sound('card1', percent); lucky[i]:juice_up(0.3, 0.3); return true
+            for _ = 1, modification_count do
+                ---@type Card
+                local new_target = pseudorandom_element(valid_targets, pseudoseed("rchariot")) --[[@as Card]]
+                targets[new_target] = true
+                for i, held_card in ipairs(valid_targets) do
+                    if held_card == new_target then
+                        table.remove(valid_targets, i)
+                        break
+                    end
                 end
-            }))
-        end
-        delay(0.2)
-        for i = 1, #lucky do
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.1,
-                func = function()
-                    copy_card(glass, lucky[i])
-                    return true
-                end
-            }))
-        end
-        for i = 1, #lucky do
-            local percent = 0.85 + (i - 0.999) / (#lucky - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    lucky[i]:flip(); play_sound('tarot2', percent, 0.6); lucky[i]:juice_up(0.3, 0.3); return true
-                end
-            }))
-        end
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.2,
-            func = function()
-                G.hand:unhighlight_all(); return true
             end
-        }))
-        delay(0.5)
+            for _, hand_card in ipairs(G.hand.cards) do
+                if targets[hand_card] then
+                    table.insert(modification_list, hand_card)
+                end
+            end
+        end
+        modify_cards(modification_list, function(target)
+            target:set_ability(G.P_CENTERS.m_glass)
+        end)
     end,
 })
 SMODS.Consumable({
