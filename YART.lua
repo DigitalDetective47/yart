@@ -200,7 +200,7 @@ SMODS.Consumable({
     end,
     can_use = hand_not_empty,
     use = function(self, card, area)
-        if pseudorandom('rmagician') < G.GAME.probabilities.normal / card.ability.chance then
+        if SMODS.pseudorandom_probability(card, "rmagician", 1, card.ability.chance) then
             modify_cards(G.hand.cards, function(target)
                 target:set_ability(G.P_CENTERS.m_lucky)
             end)
@@ -224,7 +224,7 @@ SMODS.Consumable({
     end,
     can_bulk_use = true,
     use = function(self, card, area)
-        if pseudorandom('rhigh_priestess') < G.GAME.probabilities.normal / card.ability.chance then
+        if SMODS.pseudorandom_probability(card, "rhigh_priestess", 1, card.ability.chance) then
             add_tag(Tag("tag_meteor"))
         else
             nope(card, G.C.SECONDARY_SET.Tarot)
@@ -333,7 +333,7 @@ SMODS.Consumable({
     end,
     can_bulk_use = true,
     use = function(self, card, area)
-        if pseudorandom('remperor') < G.GAME.probabilities.normal / card.ability.chance then
+        if SMODS.pseudorandom_probability(card, "remperor", 1, card.ability.chance) then
             add_tag(Tag("tag_charm"))
         else
             nope(card, G.C.SECONDARY_SET.Tarot)
@@ -742,7 +742,7 @@ SMODS.Consumable({
             delay = 0.2,
             func = function()
                 for k, v in ipairs(destroy) do
-                    if v.ability.name == 'm_glass' then
+                    if SMODS.shatters(v) then
                         v:shatter()
                     else
                         v:start_dissolve()
@@ -1207,7 +1207,7 @@ SMODS.Consumable({
     end,
     can_bulk_use = true,
     use = function(self, card, area)
-        if pseudorandom('rjudgement') < G.GAME.probabilities.normal / card.ability.chance then
+        if SMODS.pseudorandom_probability(card, "rjudgement", 1, card.ability.chance) then
             add_tag(Tag("tag_buffoon"))
         else
             nope(card, G.C.SECONDARY_SET.Tarot)
