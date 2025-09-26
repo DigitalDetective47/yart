@@ -671,7 +671,10 @@ SMODS.Consumable({
         local rank = pseudorandom_element(ranks, pseudoseed('rStrength')) --[[@as string]]
         delay(0.2)
         modify_cards(G.hand.highlighted, function(target)
-            SMODS.change_base(target, nil, rank)
+            local ret, message = SMODS.change_base(target, nil, rank)
+            if not ret then
+                sendErrorMessage(message)
+            end
         end)
     end,
 })
