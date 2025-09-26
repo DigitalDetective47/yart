@@ -595,7 +595,7 @@ SMODS.Consumable({
         end
     end,
     use = function(self, card, area)
-        if pseudorandom('rwheel_of_fortune') < G.GAME.probabilities.normal / card.ability.chance then
+        if SMODS.pseudorandom_probability(card, 'rwheel_of_fortune', 1, card.ability.chance) then
             ---@type Card[]
             local pool = {}
             for k, v in pairs(G.jokers.cards) do
@@ -687,7 +687,7 @@ SMODS.Consumable({
     use = function(self, card, area)
         ---@type Card[]
         local destroy = {}
-        if pseudorandom('rhanged_man') < 0.5 then
+        if SMODS.pseudorandom_probability(card, "rhanged_man", 1, 2, nil, true) then
             for k, v in ipairs(G.hand.highlighted) do
                 table.insert(destroy, v)
             end
