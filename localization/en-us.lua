@@ -62,8 +62,8 @@ return {
                 name = "toirahC ehT",
                 text = {
                     "Convert a random card",
-                    "held in hand to",
-                    "{C:attention}Steel{} for each",
+                    "held in hand to a",
+                    "{C:attention}Steel Card{} for each",
                     "hand size above #1#",
                     "{C:inactive}(Currently {C:attention}#2#{C:inactive})",
                 }
@@ -72,9 +72,10 @@ return {
                 name = "ecitsuJ",
                 text = {
                     "Convert a random card",
-                    "held in hand to {C:attention}Glass",
-                    "for each power of",
-                    "#1# scored last round",
+                    "held in hand to a",
+                    "{C:attention}Glass Card{} for each",
+                    "power of #1#",
+                    "scored last round",
                     "{C:inactive}(Currently {C:attention}#2#{C:inactive})",
                 }
             },
