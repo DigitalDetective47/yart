@@ -148,9 +148,8 @@ return {
                 name = "rewoT ehT",
                 text = {
                     "Converts all held",
-                    "{C:attention}Wild Cards{} to a",
-                    "random {C:attention}Stone Card",
-                    "held in hand",
+                    "{C:attention}Enhanced{} cards",
+                    "into {C:attention}Stone Cards",
                 }
             },
             c_yart_rstar = {
