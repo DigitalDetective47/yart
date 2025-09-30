@@ -127,6 +127,14 @@ local function hand_not_empty(self, card)
     return #G.hand.cards ~= 0
 end
 
+---`can_use` function for always usable consumables
+---@param self SMODS.Consumable
+---@param card Card
+---@return boolean
+local function always_usable(self, card)
+    return true
+end
+
 SMODS.Atlas({
     key = "rtarots",
     path = "tarot.png",
@@ -219,9 +227,7 @@ SMODS.Consumable({
         table.insert(info_queue, G.P_TAGS.tag_meteor)
         return { vars = { G.GAME.probabilities.normal, card.ability.chance } }
     end,
-    can_use = function(self, card)
-        return true
-    end,
+    can_use = always_usable,
     can_bulk_use = true,
     use = function(self, card, area)
         if SMODS.pseudorandom_probability(card, "rhigh_priestess", 1, card.ability.chance) then
@@ -273,9 +279,7 @@ SMODS.Consumable({
         table.insert(info_queue, G.P_TAGS.tag_charm)
         return { vars = { G.GAME.probabilities.normal, card.ability.chance } }
     end,
-    can_use = function(self, card)
-        return true
-    end,
+    can_use = always_usable,
     can_bulk_use = true,
     use = function(self, card, area)
         if SMODS.pseudorandom_probability(card, "remperor", 1, card.ability.chance) then
@@ -723,9 +727,7 @@ SMODS.Consumable({
     loc_vars = function(self, info_queue, card)
         return { vars = { G.GAME.consumeable_usage_total and math.max(G.GAME.consumeable_usage_total.all * card.ability.factor, card.ability.extra) or 0, card.ability.factor, card.ability.extra } }
     end,
-    can_use = function(self, card)
-        return true
-    end,
+    can_use = always_usable,
     can_bulk_use = true,
     use = function(self, card, area)
         G.E_MANAGER:add_event(Event({
@@ -1003,9 +1005,7 @@ SMODS.Consumable({
         table.insert(info_queue, G.P_TAGS.tag_buffoon)
         return { vars = { G.GAME.probabilities.normal, card.ability.chance } }
     end,
-    can_use = function(self, card)
-        return true
-    end,
+    can_use = always_usable,
     can_bulk_use = true,
     use = function(self, card, area)
         if SMODS.pseudorandom_probability(card, "rjudgement", 1, card.ability.chance) then
