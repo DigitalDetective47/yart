@@ -248,9 +248,6 @@ SMODS.Consumable({
         return { vars = { card.ability.extra } }
     end,
     can_use = function(self, card)
-        if not (G.hand and G.hand.cards and G.hand.highlighted) then
-            return false
-        end
         ---@type integer
         local highlighted_count = #G.hand.highlighted * card.ability.extra
         if highlighted_count < 1 then
@@ -853,11 +850,9 @@ SMODS.Consumable({
         table.insert(info_queue, G.P_CENTERS.m_stone)
     end,
     can_use = function(self, card)
-        if G.hand and G.hand.cards then
-            for _, other in ipairs(G.hand.cards) do
-                if next(SMODS.get_enhancements(other) --[[@as table]]) then
-                    return true
-                end
+        for _, other in ipairs(G.hand.cards) do
+            if next(SMODS.get_enhancements(other) --[[@as table]]) then
+                return true
             end
         end
         return false
@@ -884,11 +879,9 @@ SMODS.Consumable({
         table.insert(info_queue, G.P_CENTERS.m_gold)
     end,
     can_use = function(self, card)
-        if G.hand and G.hand.cards then
-            for k, v in ipairs(G.hand.cards) do
-                if v:is_suit("Diamonds") then
-                    return true
-                end
+        for k, v in ipairs(G.hand.cards) do
+            if v:is_suit("Diamonds") then
+                return true
             end
         end
         return false
@@ -924,11 +917,9 @@ SMODS.Consumable({
         table.insert(info_queue, G.P_CENTERS.m_mult)
     end,
     can_use = function(self, card)
-        if G.hand and G.hand.cards then
-            for k, v in ipairs(G.hand.cards) do
-                if v:is_suit("Clubs") then
-                    return true
-                end
+        for k, v in ipairs(G.hand.cards) do
+            if v:is_suit("Clubs") then
+                return true
             end
         end
         return false
@@ -964,11 +955,9 @@ SMODS.Consumable({
         table.insert(info_queue, G.P_CENTERS.m_glass)
     end,
     can_use = function(self, card)
-        if G.hand and G.hand.cards then
-            for k, v in ipairs(G.hand.cards) do
-                if v:is_suit("Hearts") then
-                    return true
-                end
+        for k, v in ipairs(G.hand.cards) do
+            if v:is_suit("Hearts") then
+                return true
             end
         end
         return false
@@ -1024,11 +1013,9 @@ SMODS.Consumable({
         table.insert(info_queue, G.P_CENTERS.m_bonus)
     end,
     can_use = function(self, card)
-        if G.hand and G.hand.cards then
-            for k, v in ipairs(G.hand.cards) do
-                if v:is_suit("Spades") then
-                    return true
-                end
+        for k, v in ipairs(G.hand.cards) do
+            if v:is_suit("Spades") then
+                return true
             end
         end
         return false
