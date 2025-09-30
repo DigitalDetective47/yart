@@ -27,10 +27,10 @@ return {
             c_yart_rempress = {
                 name = "sserpmE ehT",
                 text = {
-                    "Converts all held",
-                    "{C:attention}Bonus Cards{} to a",
-                    "random {C:attention}Mult Card",
-                    "held in hand",
+                    "Converts up to #1#",
+                    "selected card into a",
+                    "{C:attention}Mult Card{} for each",
+                    "{C:attention}Mult Card{} held in hand",
                 }
             },
             c_yart_remperor = {
