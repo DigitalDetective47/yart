@@ -593,7 +593,7 @@ SMODS.Consumable({
         return { vars = { card.ability.limit } }
     end,
     can_use = function(self, card)
-        return #G.hand.highlighted > 0 and #G.hand.highlighted <= card.ability.limit
+        return next(G.hand.highlighted) and #G.hand.highlighted <= card.ability.limit
     end,
     use = function(self, card, area)
         G.E_MANAGER:add_event(Event({
@@ -682,102 +682,36 @@ SMODS.Consumable({
     set = "Tarot",
     pos = { x = 2, y = 2 },
     atlas = "rtarots",
-    config = { limit = 3 },
+    config = { limit = 2 },
     loc_vars = function(self, info_queue, card)
-        local rightmost = nil
-        if G.hand and G.hand.highlighted and #G.hand.highlighted > 0 then
-            rightmost = G.hand.highlighted[1]
-            for k, v in ipairs(G.hand.highlighted) do
-                if v.T.x > rightmost.T.x then
-                    rightmost = v
-                end
-            end
-        end
-        return { vars = { card.ability.limit, rightmost and rightmost:get_chip_bonus() or 0 } }
+        return { vars = { card.ability.limit } }
     end,
     can_use = function(self, card)
-        local rightmost = nil
-        if #G.hand.highlighted > 0 then
-            rightmost = G.hand.highlighted[1]
-            for k, v in ipairs(G.hand.highlighted) do
-                if v.T.x > rightmost.T.x then
-                    rightmost = v
-                end
-            end
-        end
-        return #G.hand.highlighted >= 2 and #G.hand.highlighted <= card.ability.limit and
-            StrangeLib.safe_compare(G.GAME.dollars - rightmost:get_chip_bonus() -
-                ((card.area == G.shop_jokers or card.area == G.shop_booster or card.area == G.shop_vouchers) and card.cost or 0),
-                ">=", G.GAME.bankrupt_at)
+        return #G.hand.highlighted == card.ability.limit
     end,
     use = function(self, card, area)
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.4,
-            func = function()
-                play_sound('tarot1')
-                card:juice_up(0.3, 0.5)
-                return true
+        ---@type Card
+        local left = G.hand.highlighted[1]
+        ---@type Card
+        local right = G.hand.highlighted[1]
+        for _, other in ipairs(G.hand.highlighted) do
+            if other.T.x < left.T.x then
+                left = other
             end
-        }))
-        for i = 1, #G.hand.highlighted do
-            local percent = 1.15 - (i - 0.999) / (#G.hand.highlighted - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    G.hand.highlighted[i]:flip(); play_sound('card1', percent); G.hand.highlighted[i]:juice_up(0.3, 0.3); return true
-                end
-            }))
-        end
-        delay(0.2)
-        local rightmost = G.hand.highlighted[1]
-        for k, v in ipairs(G.hand.highlighted) do
-            if v.T.x > rightmost.T.x then
-                rightmost = v
+            if other.T.x > right.T.x then
+                right = other
             end
         end
-        for k, v in ipairs(G.hand.highlighted) do
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.1,
-                func = function()
-                    if v ~= rightmost then
-                        copy_card(rightmost, v)
-                    end
-                    return true
-                end
-            }))
-        end
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.4,
-            func = function()
-                card:juice_up(0.3, 0.5)
-                ease_dollars(-rightmost:get_chip_bonus(), true)
-                return true
+        modify_cards(G.hand.highlighted, function(target)
+            local ret, message = SMODS.change_base(target, left.base.suit, left.base.value)
+            if not ret then
+                sendErrorMessage(message)
+                return
             end
-        }))
-        delay(0.6)
-        for i = 1, #G.hand.highlighted do
-            local percent = 0.85 + (i - 0.999) / (#G.hand.highlighted - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    G.hand.highlighted[i]:flip(); play_sound('tarot2', percent, 0.6); G.hand.highlighted[i]:juice_up(0.3,
-                        0.3); return true
-                end
-            }))
-        end
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.2,
-            func = function()
-                G.hand:unhighlight_all(); return true
-            end
-        }))
-        delay(0.5)
+            target:set_ability(right.config.center)
+            target:set_seal(right.seal, true, true)
+            target:set_edition(right.edition, true, true)
+        end)
     end,
 })
 SMODS.Consumable({
