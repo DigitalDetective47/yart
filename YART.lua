@@ -1043,18 +1043,18 @@ SMODS.Consumable({
     end,
 })
 
-StrangeLib.bulk_add(SMODS.Challenges.c_fragile_1.restrictions.banned_cards, {
-    { id = "c_yart_rmagician" },
-    { id = "c_yart_rempress" },
-    { id = "c_yart_rheirophant" },
-    { id = "c_yart_rlovers" },
-    { id = "c_yart_rchariot" },
-    { id = "c_yart_rdevil" },
-    { id = "c_yart_rtower" },
-    { id = "c_yart_rstar" },
-    { id = "c_yart_rmoon" },
-    { id = "c_yart_rworld" },
-})
+for _, key in ipairs({ "c_yart_rmagician",
+    "c_yart_rempress",
+    "c_yart_rheirophant",
+    "c_yart_rlovers",
+    "c_yart_rchariot",
+    "c_yart_rdevil",
+    "c_yart_rtower",
+    "c_yart_rstar",
+    "c_yart_rmoon",
+    "c_yart_rworld", }) do
+    table.insert(SMODS.Challenges.c_fragile_1.restrictions.banned_cards, { id = key })
+end
 table.insert(SMODS.Challenges.c_jokerless_1.restrictions.banned_cards, 2, { id = "c_yart_rjudgement" })
 
 if (SMODS.Mods["sun_is_sus"] or {}).can_load then
