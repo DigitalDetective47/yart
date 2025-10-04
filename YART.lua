@@ -759,86 +759,39 @@ SMODS.Consumable({
     set = "Tarot",
     pos = { x = 4, y = 2 },
     atlas = "rtarots",
+    config = { money = 10, cards = 1, limit = 5 },
     loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_CENTERS.m_gold)
-        table.insert(info_queue, G.P_CENTERS.m_steel)
+        return { vars = { card.ability.money, card.ability.cards, card.ability.limit, math.min(math.floor(G.GAME.dollars / card.ability.money) * card.ability.cards, card.ability.limit) } }
     end,
     can_use = function(self, card)
-        local has_steel = false
-        local has_gold = false
-        if G.hand and G.hand.cards then
-            for k, v in ipairs(G.hand.cards) do
-                if SMODS.has_enhancement(v, "m_steel") then
-                    has_steel = true
-                elseif SMODS.has_enhancement(v, "m_gold") then
-                    has_gold = true
-                end
-            end
-        end
-        return has_steel and has_gold
+        return G.GAME.dollars > card.ability.money
     end,
     use = function(self, card, area)
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.4,
-            func = function()
-                play_sound('tarot1')
-                card:juice_up(0.3, 0.5)
-                return true
-            end
-        }))
-        local gold = {}
-        for k, v in ipairs(G.hand.cards) do
-            if SMODS.has_enhancement(v, "m_gold") then
-                table.insert(gold, v)
-            end
+        ---@type table<Card, true>
+        local targets = {}
+        ---@type Card[]
+        local remaining_cards = {}
+        for index, value in ipairs(G.playing_cards) do
+            remaining_cards[index] = value
         end
-        gold = pseudorandom_element(gold, pseudoseed('rdevil'))
-        local steel = {}
-        for k, v in ipairs(G.hand.cards) do
-            if SMODS.has_enhancement(v, "m_steel") then
-                table.insert(steel, v)
+        for _ = 1, math.min(math.floor(G.GAME.dollars / card.ability.money) * card.ability.cards, card.ability.limit) do
+            targets[table.remove(remaining_cards, pseudorandom('rdevil', 1, #remaining_cards))] = true
+        end
+        ---@type Card[]
+        local modification_list = {}
+        for _, other in ipairs(G.hand.cards) do
+            if targets[other] then
+                table.insert(modification_list, other)
+                targets[other] = nil
             end
         end
-        for i = 1, #steel do
-            local percent = 1.15 - (i - 0.999) / (#steel - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    steel[i]:flip(); play_sound('card1', percent); steel[i]:juice_up(0.3, 0.3); return true
-                end
-            }))
+        for other, _ in pairs(targets) do
+            table.insert(modification_list, other)
         end
-        delay(0.2)
-        for i = 1, #steel do
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.1,
-                func = function()
-                    copy_card(gold, steel[i])
-                    return true
-                end
-            }))
-        end
-        for i = 1, #steel do
-            local percent = 0.85 + (i - 0.999) / (#steel - 0.998) * 0.3
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.15,
-                func = function()
-                    steel[i]:flip(); play_sound('tarot2', percent, 0.6); steel[i]:juice_up(0.3, 0.3); return true
-                end
-            }))
-        end
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.2,
-            func = function()
-                G.hand:unhighlight_all(); return true
-            end
-        }))
-        delay(0.5)
+        modify_cards(modification_list, function(target)
+            target:set_ability(G.P_CENTERS.m_gold)
+        end)
     end,
 })
 SMODS.Consumable({

@@ -137,10 +137,12 @@ return {
             c_yart_rdevil = {
                 name = "liveD ehT",
                 text = {
-                    "Converts all held",
-                    "{C:attention}Steel Cards{} to a",
-                    "random {C:attention}Gold Card",
-                    "held in hand",
+                    "Converts {C:attention}#2#{} random card",
+                    "in your full deck to",
+                    "a {C:attention}Gold Card{} for each",
+                    "{C:money}$#1#{} you currently have",
+                    "{C:inactive}(Max of {C:attention}#3#{C:inactive})",
+                    "{C:inactive}(Currently {C:attention}#4#{C:inactive})",
                 }
             },
             c_yart_rtower = {
