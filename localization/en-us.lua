@@ -204,5 +204,10 @@ return {
                 }
             }
         }
+    },
+    misc = {
+        challenge_names = {
+            c_yart_dinnerbone = "Dinnerbone",
+        }
     }
 }

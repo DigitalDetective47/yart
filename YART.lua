@@ -1024,3 +1024,19 @@ if (SMODS.Mods["sun_is_sus"] or {}).can_load then
     })
     table.insert(TexturePacks.texpack_sus_sus.textures, "yart_rsus")
 end
+
+SMODS.Challenge({
+    key = "dinnerbone",
+    restrictions = { banned_cards = {} }
+})
+
+G.E_MANAGER:add_event(Event({
+    func = function()
+        for _, center in ipairs(G.P_CENTER_POOLS.Tarot) do
+            if center.original_mod ~= SMODS.find_mod("YART")[1] then
+                table.insert(SMODS.Challenges.c_yart_dinnerbone.restrictions.banned_cards, { id = center.key })
+            end
+        end
+        return true
+    end
+}))
