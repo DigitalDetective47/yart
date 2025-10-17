@@ -12,7 +12,8 @@
     "version": "2.0.2~0j17c",
     "priority": 1,
     "dependencies": [
-        "Steamodded (>=1.0.0~BETA-0808a)"
+        "Steamodded (>=1.0.0~BETA-0808a)",
+        "StrangeLib (>=1.2)"
     ],
     "conflicts": [
         "TagPreview"
