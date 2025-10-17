@@ -665,13 +665,7 @@ SMODS.Consumable({
             trigger = 'after',
             delay = 0.2,
             func = function()
-                for k, v in ipairs(destroy) do
-                    if SMODS.shatters(v) then
-                        v:shatter()
-                    else
-                        v:start_dissolve()
-                    end
-                end
+                SMODS.destroy_cards(destroy)
                 G.hand:unhighlight_all()
                 return true
             end
