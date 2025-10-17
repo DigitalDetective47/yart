@@ -298,7 +298,7 @@ SMODS.Consumable({
     end,
     can_use = function(self, card)
         for _, other in ipairs(G.hand.cards) do
-            if other:get_chip_bonus() <= card.ability.threshold then
+            if StrangeLib.safe_compare(other:get_chip_bonus(), "<=", card.ability.threshold) then
                 return true
             end
         end
@@ -308,7 +308,7 @@ SMODS.Consumable({
         ---@type Card[]
         local targets = {}
         for _, other in ipairs(G.hand.cards) do
-            if other:get_chip_bonus() <= card.ability.threshold then
+            if StrangeLib.safe_compare(other:get_chip_bonus(), "<=", card.ability.threshold) then
                 table.insert(targets, other)
             end
         end
@@ -437,7 +437,7 @@ SMODS.Consumable({
         return { vars = { card.ability.base, math.floor(card.ability.base == 100 and math.log10(G.GAME.yart_last_round_score) / 2 or math.log(G.GAME.yart_last_round_score, card.ability.base)) } }
     end,
     can_use = function(self, card)
-        return #G.hand.cards > 0 and G.GAME.yart_last_round_score >= card.ability.base
+        return #G.hand.cards > 0 and StrangeLib.safe_compare(G.GAME.yart_last_round_score, ">=", card.ability.base)
     end,
     use = function(self, card, area)
         ---@type integer
@@ -445,7 +445,7 @@ SMODS.Consumable({
             math.log(G.GAME.yart_last_round_score, card.ability.base))
         ---@type Card[]
         local modification_list
-        if #G.hand.cards < modification_count then
+        if StrangeLib.safe_compare(#G.hand.cards, "<", modification_count) then
             modification_list = G.hand.cards
             for _ = 1, #G.hand.cards do
                 pseudoseed("rjustice")
@@ -759,7 +759,7 @@ SMODS.Consumable({
         return { vars = { card.ability.money, card.ability.cards, card.ability.limit, math.min(math.floor(G.GAME.dollars / card.ability.money) * card.ability.cards, card.ability.limit) } }
     end,
     can_use = function(self, card)
-        return G.GAME.dollars > card.ability.money
+        return StrangeLib.safe_compare(G.GAME.dollars, ">", card.ability.money)
     end,
     use = function(self, card, area)
         ---@type table<Card, true>
