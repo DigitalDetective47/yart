@@ -393,10 +393,7 @@ SMODS.Consumable({
             ---@type table<Card, true>
             local targets = {}
             ---@type Card[]
-            local valid_targets = {}
-            for i, hand_card in ipairs(G.hand.cards) do
-                valid_targets[i] = hand_card
-            end
+            local valid_targets = SMODS.shallow_copy(G.hand.cards)
             for _ = 1, G.hand.config.card_limit - card.ability.extra do
                 ---@type Card
                 local new_target = pseudorandom_element(valid_targets, pseudoseed("rchariot")) --[[@as Card]]
@@ -455,10 +452,7 @@ SMODS.Consumable({
             ---@type table<Card, true>
             local targets = {}
             ---@type Card[]
-            local valid_targets = {}
-            for i, hand_card in ipairs(G.hand.cards) do
-                valid_targets[i] = hand_card
-            end
+            local valid_targets = SMODS.shallow_copy(G.hand.cards)
             for _ = 1, modification_count do
                 ---@type Card
                 local new_target = pseudorandom_element(valid_targets, pseudoseed("rchariot")) --[[@as Card]]
@@ -632,23 +626,17 @@ SMODS.Consumable({
     can_use = hand_not_empty,
     use = function(self, card, area)
         ---@type Card[]
-        local destroy = {}
+        local destroy
         if SMODS.pseudorandom_probability(card, "rhanged_man", 1, 2, nil, true) then
-            for k, v in ipairs(G.hand.highlighted) do
-                table.insert(destroy, v)
-            end
+            destroy = G.hand.highlighted
         else
-            for k, v in ipairs(G.hand.cards) do
-                ---@type boolean
-                local highlighted = false
-                for hk, hv in ipairs(G.hand.highlighted) do
-                    if v == hv then
-                        highlighted = true
+            destroy = SMODS.shallow_copy(G.hand.cards)
+            for k, v in ipairs(G.hand.highlighted) do
+                for dk, dv in ipairs(destroy) do
+                    if v == dv then
+                        table.remove(destroy, dk)
                         break
                     end
-                end
-                if not highlighted then
-                    table.insert(destroy, v)
                 end
             end
         end
@@ -765,10 +753,7 @@ SMODS.Consumable({
         ---@type table<Card, true>
         local targets = {}
         ---@type Card[]
-        local remaining_cards = {}
-        for index, value in ipairs(G.playing_cards) do
-            remaining_cards[index] = value
-        end
+        local remaining_cards = SMODS.shallow_copy(G.playing_cards)
         for _ = 1, math.min(math.floor(G.GAME.dollars / card.ability.money) * card.ability.cards, card.ability.limit) do
             targets[table.remove(remaining_cards, pseudorandom('rdevil', 1, #remaining_cards))] = true
         end
