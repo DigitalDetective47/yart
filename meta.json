@@ -6,10 +6,10 @@
     ],
     "description": "A Balatro mod that adds reversed tarot cards to the game",
     "prefix": "yart",
-    "main_file": "YART.lua",
+    "main_file": "main.lua",
     "badge_colour": "A782D1",
     "display_name": "YART",
-    "version": "2.0.2~0j17b",
+    "version": "2.0.2~0j17c",
     "priority": 1,
     "dependencies": [
         "Steamodded (>=1.0.0~BETA-0808a)"
