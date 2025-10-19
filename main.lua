@@ -459,15 +459,6 @@ SMODS.Consumable({
     end,
     can_use = StrangeLib.consumable.use_templates.selection_limit,
     use = function(self, card, area)
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.4,
-            func = function()
-                play_sound('tarot1')
-                card:juice_up(0.3, 0.5)
-                return true
-            end
-        }))
         ---@type string[]
         local ranks = {}
         for k, v in ipairs(G.playing_cards) do
@@ -477,7 +468,6 @@ SMODS.Consumable({
         end
         ---@type string
         local rank = pseudorandom_element(ranks, pseudoseed('rstrength')) --[[@as string]]
-        delay(0.2)
         StrangeLib.consumable.tarot_animation(G.hand.highlighted, function(target)
             local ret, message = SMODS.change_base(target, nil, rank)
             if not ret then
