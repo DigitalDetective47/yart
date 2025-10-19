@@ -5,136 +5,6 @@ SMODS.Atlas({
     py = 34,
 })
 
----Modify cards with the tarot animation
----@param targets Card[]
----@param modification fun(card: Card): nil
-local function modify_cards(targets, modification)
-    ---@type table<Card, true>
-    local hand_set = {}
-    for _, card in ipairs(G.hand.cards) do
-        hand_set[card] = true
-    end
-    ---@type Card[]
-    local hand_targets = {}
-    for _, target in ipairs(targets) do
-        if hand_set[target] then
-            table.insert(hand_targets, target)
-        else
-            modification(target)
-        end
-    end
-    for i, target in ipairs(hand_targets) do
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.15,
-            func = function()
-                target:flip()
-                play_sound('card1', 1.15 - (i - 0.999) / (#hand_targets - 0.998) * 0.3)
-                target:juice_up(0.3, 0.3)
-                return true
-            end
-        }))
-    end
-    delay(0.2)
-    for i, target in ipairs(hand_targets) do
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.1,
-            func = function()
-                modification(target)
-                return true
-            end
-        }))
-    end
-    for i, target in ipairs(hand_targets) do
-        G.E_MANAGER:add_event(Event({
-            trigger = 'after',
-            delay = 0.15,
-            func = function()
-                target:flip()
-                play_sound('tarot2', 0.85 + (i - 0.999) / (#hand_targets - 0.998) * 0.3, 0.6)
-                target:juice_up(0.3, 0.3)
-                return true
-            end
-        }))
-    end
-    G.E_MANAGER:add_event(Event({
-        trigger = 'after',
-        delay = 0.2,
-        func = function()
-            G.hand:unhighlight_all(); return true
-        end
-    }))
-    delay(0.5)
-end
-
----@class Colour [number, number, number, number]
-
----@param card Card
----@param colour Colour
-local function nope(card, colour)
-    G.E_MANAGER:add_event(Event({
-        trigger = "after",
-        delay = 0.4,
-        func = function() --"borrowed" from Wheel Of Fortune
-            attention_text({
-                text = localize("k_nope_ex"),
-                scale = 1.3,
-                hold = 1.4,
-                major = card,
-                backdrop_colour = colour,
-                align = (
-                        G.STATE == G.STATES.TAROT_PACK
-                        or G.STATE == G.STATES.SPECTRAL_PACK
-                        or G.STATE == G.STATES.SMODS_BOOSTER_OPENED
-                    )
-                    and "tm"
-                    or "cm",
-                offset = {
-                    x = 0,
-                    y = (
-                            G.STATE == G.STATES.TAROT_PACK
-                            or G.STATE == G.STATES.SPECTRAL_PACK
-                            or G.STATE == G.STATES.SMODS_BOOSTER_OPENED
-                        )
-                        and -0.2
-                        or 0,
-                },
-                silent = true,
-            })
-            G.E_MANAGER:add_event(Event({
-                trigger = "after",
-                delay = 0.06 * G.SETTINGS.GAMESPEED,
-                blockable = false,
-                blocking = false,
-                func = function()
-                    play_sound("tarot2", 0.76, 0.4)
-                    return true
-                end,
-            }))
-            play_sound("tarot2", 1, 0.4)
-            card:juice_up(0.3, 0.5)
-            return true
-        end,
-    }))
-end
-
----`can_use` function used by multiple reversed tarot cards
----@param self SMODS.Consumable
----@param card Card
----@return boolean
-local function hand_not_empty(self, card)
-    return #G.hand.cards ~= 0
-end
-
----`can_use` function for always usable consumables
----@param self SMODS.Consumable
----@param card Card
----@return boolean
-local function always_usable(self, card)
-    return true
-end
-
 SMODS.Atlas({
     key = "rtarots",
     path = "tarot.png",
@@ -206,14 +76,14 @@ SMODS.Consumable({
         table.insert(info_queue, G.P_CENTERS.m_lucky)
         return { vars = { G.GAME.probabilities.normal, card.ability.chance } }
     end,
-    can_use = hand_not_empty,
+    can_use = StrangeLib.consumable.use_templates.hand_not_empty,
     use = function(self, card, area)
         if SMODS.pseudorandom_probability(card, "rmagician", 1, card.ability.chance) then
-            modify_cards(G.hand.cards, function(target)
+            StrangeLib.consumable.tarot_animation(G.hand.cards, function(target)
                 target:set_ability(G.P_CENTERS.m_lucky)
             end)
         else
-            nope(card, G.C.SECONDARY_SET.Tarot)
+            StrangeLib.consumable.nope(card, G.C.SECONDARY_SET.Tarot)
         end
     end,
 })
@@ -227,13 +97,13 @@ SMODS.Consumable({
         table.insert(info_queue, G.P_TAGS.tag_meteor)
         return { vars = { G.GAME.probabilities.normal, card.ability.chance } }
     end,
-    can_use = always_usable,
+    can_use = StrangeLib.consumable.use_templates.always_usable,
     can_bulk_use = true,
     use = function(self, card, area)
         if SMODS.pseudorandom_probability(card, "rhigh_priestess", 1, card.ability.chance) then
             add_tag(Tag("tag_meteor"))
         else
-            nope(card, G.C.SECONDARY_SET.Tarot)
+            StrangeLib.consumable.nope(card, G.C.SECONDARY_SET.Tarot)
         end
     end,
 })
@@ -261,7 +131,7 @@ SMODS.Consumable({
         return highlighted_count <= 0
     end,
     use = function(self, card, area)
-        modify_cards(G.hand.highlighted, function(target)
+        StrangeLib.consumable.tarot_animation(G.hand.highlighted, function(target)
             target:set_ability(G.P_CENTERS.m_mult)
         end)
     end,
@@ -276,13 +146,13 @@ SMODS.Consumable({
         table.insert(info_queue, G.P_TAGS.tag_charm)
         return { vars = { G.GAME.probabilities.normal, card.ability.chance } }
     end,
-    can_use = always_usable,
+    can_use = StrangeLib.consumable.use_templates.always_usable,
     can_bulk_use = true,
     use = function(self, card, area)
         if SMODS.pseudorandom_probability(card, "remperor", 1, card.ability.chance) then
             add_tag(Tag("tag_charm"))
         else
-            nope(card, G.C.SECONDARY_SET.Tarot)
+            StrangeLib.consumable.nope(card, G.C.SECONDARY_SET.Tarot)
         end
     end,
 })
@@ -312,7 +182,7 @@ SMODS.Consumable({
                 table.insert(targets, other)
             end
         end
-        modify_cards(targets, function(target)
+        StrangeLib.consumable.tarot_animation(targets, function(target)
             target:set_ability(G.P_CENTERS.m_bonus)
         end)
     end,
@@ -325,7 +195,7 @@ SMODS.Consumable({
     loc_vars = function(self, info_queue, card)
         table.insert(info_queue, G.P_CENTERS.m_wild)
     end,
-    can_use = hand_not_empty,
+    can_use = StrangeLib.consumable.use_templates.hand_not_empty,
     use = function(self, card, area)
         G.hand:unhighlight_all()
         ---@type Card
@@ -359,7 +229,7 @@ SMODS.Consumable({
             end
         end
         delay(0.5)
-        modify_cards(targets, function(target)
+        StrangeLib.consumable.tarot_animation(targets, function(target)
             target:set_ability(G.P_CENTERS.m_wild)
         end)
     end,
@@ -411,7 +281,7 @@ SMODS.Consumable({
                 end
             end
         end
-        modify_cards(modification_list, function(target)
+        StrangeLib.consumable.tarot_animation(modification_list, function(target)
             target:set_ability(G.P_CENTERS.m_steel)
         end)
     end,
@@ -470,7 +340,7 @@ SMODS.Consumable({
                 end
             end
         end
-        modify_cards(modification_list, function(target)
+        StrangeLib.consumable.tarot_animation(modification_list, function(target)
             target:set_ability(G.P_CENTERS.m_glass)
         end)
     end,
@@ -583,13 +453,11 @@ SMODS.Consumable({
     set = "Tarot",
     pos = { x = 0, y = 2 },
     atlas = "rtarots",
-    config = { limit = 3 },
+    config = { min_highlighted = 1, max_highlighted = 3 },
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.limit } }
+        return { vars = { card.ability.max_highlighted } }
     end,
-    can_use = function(self, card)
-        return next(G.hand.highlighted) and #G.hand.highlighted <= card.ability.limit
-    end,
+    can_use = StrangeLib.consumable.use_templates.selection_limit,
     use = function(self, card, area)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
@@ -610,7 +478,7 @@ SMODS.Consumable({
         ---@type string
         local rank = pseudorandom_element(ranks, pseudoseed('rstrength')) --[[@as string]]
         delay(0.2)
-        modify_cards(G.hand.highlighted, function(target)
+        StrangeLib.consumable.tarot_animation(G.hand.highlighted, function(target)
             local ret, message = SMODS.change_base(target, nil, rank)
             if not ret then
                 sendErrorMessage(message)
@@ -623,7 +491,7 @@ SMODS.Consumable({
     set = "Tarot",
     pos = { x = 1, y = 2 },
     atlas = "rtarots",
-    can_use = hand_not_empty,
+    can_use = StrangeLib.consumable.use_templates.hand_not_empty,
     use = function(self, card, area)
         ---@type Card[]
         local destroy
@@ -665,13 +533,11 @@ SMODS.Consumable({
     set = "Tarot",
     pos = { x = 2, y = 2 },
     atlas = "rtarots",
-    config = { limit = 2 },
+    config = { min_highlighted = 2, max_highlighted = 2 },
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.limit } }
+        return { vars = { card.ability.max_highlighted } }
     end,
-    can_use = function(self, card)
-        return #G.hand.highlighted == card.ability.limit
-    end,
+    can_use = StrangeLib.consumable.use_templates.selection_limit,
     use = function(self, card, area)
         ---@type Card
         local left = G.hand.highlighted[1]
@@ -685,7 +551,7 @@ SMODS.Consumable({
                 right = other
             end
         end
-        modify_cards(G.hand.highlighted, function(target)
+        StrangeLib.consumable.tarot_animation(G.hand.highlighted, function(target)
             local ret, message = SMODS.change_base(target, left.base.suit, left.base.value)
             if not ret then
                 sendErrorMessage(message)
@@ -706,7 +572,7 @@ SMODS.Consumable({
     loc_vars = function(self, info_queue, card)
         return { vars = { G.GAME.consumeable_usage_total and math.max(G.GAME.consumeable_usage_total.all * card.ability.factor, card.ability.extra) or 0, card.ability.factor, card.ability.extra } }
     end,
-    can_use = always_usable,
+    can_use = StrangeLib.consumable.use_templates.always_usable,
     can_bulk_use = true,
     use = function(self, card, area)
         G.E_MANAGER:add_event(Event({
@@ -768,7 +634,7 @@ SMODS.Consumable({
         for other, _ in pairs(targets) do
             table.insert(modification_list, other)
         end
-        modify_cards(modification_list, function(target)
+        StrangeLib.consumable.tarot_animation(modification_list, function(target)
             target:set_ability(G.P_CENTERS.m_gold)
         end)
     end,
@@ -797,7 +663,7 @@ SMODS.Consumable({
                 table.insert(targets, other)
             end
         end
-        modify_cards(targets, function(target)
+        StrangeLib.consumable.tarot_animation(targets, function(target)
             target:set_ability(G.P_CENTERS.m_stone)
         end)
     end,
@@ -835,7 +701,7 @@ SMODS.Consumable({
                 table.insert(diamonds, v)
             end
         end
-        modify_cards(diamonds, function(target)
+        StrangeLib.consumable.tarot_animation(diamonds, function(target)
             target:set_ability(G.P_CENTERS.m_gold)
         end)
     end,
@@ -873,7 +739,7 @@ SMODS.Consumable({
                 table.insert(clubs, v)
             end
         end
-        modify_cards(clubs, function(target)
+        StrangeLib.consumable.tarot_animation(clubs, function(target)
             target:set_ability(G.P_CENTERS.m_mult)
         end)
     end,
@@ -911,7 +777,7 @@ SMODS.Consumable({
                 table.insert(hearts, v)
             end
         end
-        modify_cards(hearts, function(target)
+        StrangeLib.consumable.tarot_animation(hearts, function(target)
             target:set_ability(G.P_CENTERS.m_glass)
         end)
     end,
@@ -926,13 +792,13 @@ SMODS.Consumable({
         table.insert(info_queue, G.P_TAGS.tag_buffoon)
         return { vars = { G.GAME.probabilities.normal, card.ability.chance } }
     end,
-    can_use = always_usable,
+    can_use = StrangeLib.consumable.use_templates.always_usable,
     can_bulk_use = true,
     use = function(self, card, area)
         if SMODS.pseudorandom_probability(card, "rjudgement", 1, card.ability.chance) then
             add_tag(Tag("tag_buffoon"))
         else
-            nope(card, G.C.SECONDARY_SET.Tarot)
+            StrangeLib.consumable.nope(card, G.C.SECONDARY_SET.Tarot)
         end
     end,
 })
@@ -969,7 +835,7 @@ SMODS.Consumable({
                 table.insert(spades, v)
             end
         end
-        modify_cards(spades, function(target)
+        StrangeLib.consumable.tarot_animation(spades, function(target)
             target:set_ability(G.P_CENTERS.m_bonus)
         end)
     end,
