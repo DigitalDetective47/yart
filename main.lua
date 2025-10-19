@@ -532,14 +532,9 @@ SMODS.Consumable({
         ---@type Card
         local left = G.hand.highlighted[1]
         ---@type Card
-        local right = G.hand.highlighted[1]
-        for _, other in ipairs(G.hand.highlighted) do
-            if other.T.x < left.T.x then
-                left = other
-            end
-            if other.T.x > right.T.x then
-                right = other
-            end
+        local right = G.hand.highlighted[2]
+        if left.T.x > right.T.x then
+            left, right = right, left
         end
         StrangeLib.consumable.tarot_animation(G.hand.highlighted, function(target)
             local ret, message = SMODS.change_base(target, left.base.suit, left.base.value)
