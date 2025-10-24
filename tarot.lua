@@ -255,25 +255,13 @@ SMODS.Consumable({
         else
             modification_list = {}
             ---@type table<Card, true>
-            local targets = {}
-            ---@type Card[]
-            local valid_targets = SMODS.shallow_copy(G.hand.cards)
+            local valid_targets = StrangeLib.as_set(G.hand.cards)
             for _ = 1, G.hand.config.card_limit - card.ability.extra do
-                ---@type Card
-                local new_target = pseudorandom_element(valid_targets, pseudoseed("rchariot")) --[[@as Card]]
-                targets[new_target] = true
-                for i, held_card in ipairs(valid_targets) do
-                    if held_card == new_target then
-                        table.remove(valid_targets, i)
-                        break
-                    end
-                end
+                local _, new_target = pseudorandom_element(valid_targets, pseudoseed("rchariot"))
+                table.insert(modification_list, new_target)
+                valid_targets[new_target] = nil
             end
-            for _, hand_card in ipairs(G.hand.cards) do
-                if targets[hand_card] then
-                    table.insert(modification_list, hand_card)
-                end
-            end
+            table.sort(modification_list, StrangeLib.ltr)
         end
         StrangeLib.consumable.tarot_animation(modification_list, function(target)
             target:set_ability(G.P_CENTERS.m_steel)
@@ -309,25 +297,13 @@ SMODS.Consumable({
         else
             modification_list = {}
             ---@type table<Card, true>
-            local targets = {}
-            ---@type Card[]
-            local valid_targets = SMODS.shallow_copy(G.hand.cards)
+            local valid_targets = StrangeLib.as_set(G.hand.cards)
             for _ = 1, modification_count do
-                ---@type Card
-                local new_target = pseudorandom_element(valid_targets, pseudoseed("rchariot")) --[[@as Card]]
-                targets[new_target] = true
-                for i, held_card in ipairs(valid_targets) do
-                    if held_card == new_target then
-                        table.remove(valid_targets, i)
-                        break
-                    end
-                end
+                local _, new_target = pseudorandom_element(valid_targets, pseudoseed("rchariot"))
+                table.insert(modification_list, new_target)
+                valid_targets[new_target] = nil
             end
-            for _, hand_card in ipairs(G.hand.cards) do
-                if targets[hand_card] then
-                    table.insert(modification_list, hand_card)
-                end
-            end
+            table.sort(modification_list, StrangeLib.ltr)
         end
         StrangeLib.consumable.tarot_animation(modification_list, function(target)
             target:set_ability(G.P_CENTERS.m_glass)
@@ -598,23 +574,24 @@ SMODS.Consumable({
     end,
     use = function(self, card, area)
         ---@type table<Card, true>
-        local targets = {}
+        local hand_set = StrangeLib.as_set(G.hand.cards)
+        ---@type Card[]
+        local modification_list = {}
         ---@type Card[]
         local remaining_cards = SMODS.shallow_copy(G.playing_cards)
         for _ = 1, math.min(math.floor(G.GAME.dollars / card.ability.money) * card.ability.cards, card.ability.limit) do
-            targets[table.remove(remaining_cards, pseudorandom('rdevil', 1, #remaining_cards))] = true
-        end
-        ---@type Card[]
-        local modification_list = {}
-        for _, other in ipairs(G.hand.cards) do
-            if targets[other] then
-                table.insert(modification_list, other)
-                targets[other] = nil
+            if next(remaining_cards) then
+                local target = table.remove(remaining_cards, pseudorandom('rdevil', 1, #remaining_cards))
+                if hand_set[target] then
+                    table.insert(modification_list, target)
+                else
+                    target:set_ability(G.P_CENTERS.m_gold)
+                end
+            else
+                pseudoseed("rdevil")
             end
         end
-        for other, _ in pairs(targets) do
-            table.insert(modification_list, other)
-        end
+        table.sort(modification_list, StrangeLib.ltr)
         StrangeLib.consumable.tarot_animation(modification_list, function(target)
             target:set_ability(G.P_CENTERS.m_gold)
         end)
@@ -631,21 +608,21 @@ SMODS.Consumable({
     end,
     can_use = function(self, card)
         for _, other in ipairs(G.hand.cards) do
-            if next(SMODS.get_enhancements(other) --[[@as table]]) then
+            if next(SMODS.get_enhancements(other) --[[@as {[string]: true}]]) then
                 return true
             end
         end
         return false
     end,
     use = function(self, card, area)
-        --@type Card[]
-        local targets = {}
+        ---@type Card[]
+        local modification_list = {}
         for _, other in ipairs(G.hand.cards) do
-            if next(SMODS.get_enhancements(other) --[[@as table]]) then
-                table.insert(targets, other)
+            if next(SMODS.get_enhancements(other) --[[@as {[string]: true}]]) then
+                table.insert(modification_list, other)
             end
         end
-        StrangeLib.consumable.tarot_animation(targets, function(target)
+        StrangeLib.consumable.tarot_animation(modification_list, function(target)
             target:set_ability(G.P_CENTERS.m_stone)
         end)
     end,
