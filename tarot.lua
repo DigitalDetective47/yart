@@ -399,9 +399,9 @@ SMODS.Consumable({
         if SMODS.pseudorandom_probability(card, 'rwheel_of_fortune', 1, card.ability.chance) then
             ---@type Card[]
             local pool = {}
-            for k, v in pairs(G.jokers.cards) do
-                if v.ability.set == 'Joker' and (not v.edition) then
-                    table.insert(pool, v)
+            for _, joker in pairs(G.jokers.cards) do
+                if joker.ability.set == 'Joker' and (not joker.edition) then
+                    table.insert(pool, joker)
                 end
             end
             ---@type Card
@@ -418,9 +418,9 @@ SMODS.Consumable({
         else
             ---@type Card[]
             local pool = {}
-            for k, v in pairs(G.jokers.cards) do
-                if v.ability.set == 'Joker' and (not v.ability.eternal) then
-                    table.insert(pool, v)
+            for _, joker in pairs(G.jokers.cards) do
+                if joker.ability.set == 'Joker' and (not joker.ability.eternal) then
+                    table.insert(pool, joker)
                 end
             end
             if #pool ~= 0 then
@@ -453,9 +453,9 @@ SMODS.Consumable({
     use = function(self, card, area)
         ---@type string[]
         local ranks = {}
-        for k, v in ipairs(G.playing_cards) do
-            if not SMODS.has_no_rank(v) then
-                table.insert(ranks, v.base.value)
+        for _, other in ipairs(G.playing_cards) do
+            if not SMODS.has_no_rank(other) then
+                table.insert(ranks, other.base.value)
             end
         end
         ---@type string
@@ -482,10 +482,10 @@ SMODS.Consumable({
             destroy = G.hand.highlighted
         else
             destroy = SMODS.shallow_copy(G.hand.cards)
-            for k, v in ipairs(G.hand.highlighted) do
-                for dk, dv in ipairs(destroy) do
-                    if v == dv then
-                        table.remove(destroy, dk)
+            for _, highlighted in ipairs(G.hand.highlighted) do
+                for destroy_index, destroy_target in ipairs(destroy) do
+                    if highlighted == destroy_target then
+                        table.remove(destroy, destroy_index)
                         break
                     end
                 end
@@ -660,8 +660,8 @@ SMODS.Consumable({
         table.insert(info_queue, G.P_CENTERS.m_gold)
     end,
     can_use = function(self, card)
-        for k, v in ipairs(G.hand.cards) do
-            if v:is_suit("Diamonds") then
+        for _, other in ipairs(G.hand.cards) do
+            if other:is_suit("Diamonds") then
                 return true
             end
         end
@@ -679,9 +679,9 @@ SMODS.Consumable({
         }))
         ---@type Card[]
         local diamonds = {}
-        for k, v in ipairs(G.hand.cards) do
-            if v:is_suit("Diamonds") then
-                table.insert(diamonds, v)
+        for _, other in ipairs(G.hand.cards) do
+            if other:is_suit("Diamonds") then
+                table.insert(diamonds, other)
             end
         end
         StrangeLib.consumable.tarot_animation(diamonds, function(target)
@@ -699,8 +699,8 @@ SMODS.Consumable({
         table.insert(info_queue, G.P_CENTERS.m_mult)
     end,
     can_use = function(self, card)
-        for k, v in ipairs(G.hand.cards) do
-            if v:is_suit("Clubs") then
+        for _, other in ipairs(G.hand.cards) do
+            if other:is_suit("Clubs") then
                 return true
             end
         end
@@ -718,9 +718,9 @@ SMODS.Consumable({
         }))
         ---@type Card[]
         local clubs = {}
-        for k, v in ipairs(G.hand.cards) do
-            if v:is_suit("Clubs") then
-                table.insert(clubs, v)
+        for _, other in ipairs(G.hand.cards) do
+            if other:is_suit("Clubs") then
+                table.insert(clubs, other)
             end
         end
         StrangeLib.consumable.tarot_animation(clubs, function(target)
@@ -738,8 +738,8 @@ SMODS.Consumable({
         table.insert(info_queue, G.P_CENTERS.m_glass)
     end,
     can_use = function(self, card)
-        for k, v in ipairs(G.hand.cards) do
-            if v:is_suit("Hearts") then
+        for _, other in ipairs(G.hand.cards) do
+            if other:is_suit("Hearts") then
                 return true
             end
         end
@@ -757,9 +757,9 @@ SMODS.Consumable({
         }))
         ---@type Card[]
         local hearts = {}
-        for k, v in ipairs(G.hand.cards) do
-            if v:is_suit("Hearts") then
-                table.insert(hearts, v)
+        for _, other in ipairs(G.hand.cards) do
+            if other:is_suit("Hearts") then
+                table.insert(hearts, other)
             end
         end
         StrangeLib.consumable.tarot_animation(hearts, function(target)
@@ -798,8 +798,8 @@ SMODS.Consumable({
         table.insert(info_queue, G.P_CENTERS.m_bonus)
     end,
     can_use = function(self, card)
-        for k, v in ipairs(G.hand.cards) do
-            if v:is_suit("Spades") then
+        for _, other in ipairs(G.hand.cards) do
+            if other:is_suit("Spades") then
                 return true
             end
         end
@@ -817,9 +817,9 @@ SMODS.Consumable({
         }))
         ---@type Card[]
         local spades = {}
-        for k, v in ipairs(G.hand.cards) do
-            if v:is_suit("Spades") then
-                table.insert(spades, v)
+        for _, other in ipairs(G.hand.cards) do
+            if other:is_suit("Spades") then
+                table.insert(spades, other)
             end
         end
         StrangeLib.consumable.tarot_animation(spades, function(target)
