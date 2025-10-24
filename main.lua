@@ -35,21 +35,6 @@ StrangeLib.bulk_add(SMODS.Challenges.c_fragile_1.restrictions.banned_cards, {
 })
 table.insert(SMODS.Challenges.c_jokerless_1.restrictions.banned_cards, 2, { id = "c_yart_rjudgement" })
 
-if (SMODS.Mods["sun_is_sus"] or {}).can_load then
-    AltTexture({
-        key = "rsus",
-        set = "Tarot",
-        path = "rsus.png",
-        keys = {
-            "c_yart_rsun"
-        },
-        localization = {
-            "c_yart_rsun"
-        }
-    })
-    table.insert(TexturePacks.texpack_sus_sus.textures, "yart_rsus")
-end
-
 SMODS.Challenge({
     key = "dinnerbone",
     restrictions = { banned_cards = {} }
@@ -65,3 +50,5 @@ G.E_MANAGER:add_event(Event({
         return true
     end
 }))
+
+StrangeLib.load_compat()
