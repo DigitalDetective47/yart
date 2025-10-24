@@ -1,0 +1,43 @@
+{
+    "c_fragile_1": {
+        "banned_cards": [
+            {
+                "id": "c_yart_rmagician"
+            },
+            {
+                "id": "c_yart_rempress"
+            },
+            {
+                "id": "c_yart_rheirophant"
+            },
+            {
+                "id": "c_yart_rlovers"
+            },
+            {
+                "id": "c_yart_rchariot"
+            },
+            {
+                "id": "c_yart_rdevil"
+            },
+            {
+                "id": "c_yart_rtower"
+            },
+            {
+                "id": "c_yart_rstar"
+            },
+            {
+                "id": "c_yart_rmoon"
+            },
+            {
+                "id": "c_yart_rworld"
+            }
+        ]
+    },
+    "c_jokerless_1": {
+        "banned_cards": [
+            {
+                "id": "c_yart_rjudgement"
+            }
+        ]
+    }
+}

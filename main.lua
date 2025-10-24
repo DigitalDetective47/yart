@@ -21,20 +21,6 @@ end
 
 SMODS.load_file("tarot.lua")()
 
-StrangeLib.bulk_add(SMODS.Challenges.c_fragile_1.restrictions.banned_cards, {
-    { id = "c_yart_rmagician" },
-    { id = "c_yart_rempress" },
-    { id = "c_yart_rheirophant" },
-    { id = "c_yart_rlovers" },
-    { id = "c_yart_rchariot" },
-    { id = "c_yart_rdevil" },
-    { id = "c_yart_rtower" },
-    { id = "c_yart_rstar" },
-    { id = "c_yart_rmoon" },
-    { id = "c_yart_rworld" },
-})
-table.insert(SMODS.Challenges.c_jokerless_1.restrictions.banned_cards, 2, { id = "c_yart_rjudgement" })
-
 SMODS.Challenge({
     key = "dinnerbone",
     restrictions = { banned_cards = {} }
@@ -52,3 +38,4 @@ G.E_MANAGER:add_event(Event({
 }))
 
 StrangeLib.load_compat()
+StrangeLib.update_challenge_restrictions("challenge_bans.json")
