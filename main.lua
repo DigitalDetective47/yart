@@ -289,6 +289,7 @@ SMODS.Consumable({
 local cash_out_hook = G.FUNCS.cash_out
 function G.FUNCS.cash_out(e)
     G.GAME.yart_last_round_score = G.GAME.chips
+    G.GAME.last_cash_out = G.GAME.current_round.dollars
     cash_out_hook(e)
 end
 
