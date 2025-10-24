@@ -341,7 +341,7 @@ SMODS.Consumable({
     pos = { x = 4, y = 1 },
     atlas = "rtarots",
     loc_vars = function(self, info_queue, card)
-        return { vars = { G.GAME.last_cash_out or G.GAME.starting_params.dollars } }
+        return { vars = { G.GAME.last_cash_out or 0 } }
     end,
     in_pool = function(self, args)
         return G.GAME.last_cash_out ~= nil
