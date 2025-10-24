@@ -92,8 +92,7 @@
                 "text": [
                     "{C:green}#1# in #2#{} chance to add {C:dark_edition}Negative",
                     "to a random {C:attention}Joker",
-                    "Otherwise, destroy a",
-                    "random {C:attention}Joker"
+                    "Otherwise, destroy it"
                 ]
             },
             "c_yart_rstrength": {

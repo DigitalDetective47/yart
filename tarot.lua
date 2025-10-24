@@ -365,53 +365,43 @@ SMODS.Consumable({
         return { vars = { G.GAME.probabilities.normal, card.ability.chance } }
     end,
     can_use = function(self, card)
-        for k, v in pairs(G.jokers.cards) do
-            if v.ability.set == 'Joker' and (not v.edition) then
+        for _, joker in pairs(G.jokers.cards) do
+            if joker.ability.set == 'Joker' and (not joker.edition) and not (SMODS.is_eternal(joker, card)) then
                 return true
             end
         end
+        return false
     end,
     use = function(self, card, area)
-        if SMODS.pseudorandom_probability(card, 'rwheel_of_fortune', 1, card.ability.chance) then
-            ---@type Card[]
-            local pool = {}
-            for _, joker in pairs(G.jokers.cards) do
-                if joker.ability.set == 'Joker' and (not joker.edition) then
-                    table.insert(pool, joker)
-                end
+        ---@type Card[]
+        local pool = {}
+        for _, joker in pairs(G.jokers.cards) do
+            if joker.ability.set == 'Joker' and (not joker.edition) and not (SMODS.is_eternal(joker, card)) then
+                table.insert(pool, joker)
             end
-            ---@type Card
-            local selected = pseudorandom_element(pool, pseudoseed("rwheel_of_fortune")) --[[@as Card]]
+        end
+        ---@type Card
+        local target = pseudorandom_element(pool, pseudoseed("rwheel_of_fortune")) --[[@as Card]]
+        if SMODS.pseudorandom_probability(card, 'rwheel_of_fortune', 1, card.ability.chance) then
             G.E_MANAGER:add_event(Event({
                 trigger = 'after',
                 delay = 0.4,
                 func = function()
-                    selected:set_edition("e_negative")
+                    target:set_edition("e_negative")
                     card:juice_up(0.3, 0.5)
                     return true
                 end
             }))
         else
-            ---@type Card[]
-            local pool = {}
-            for _, joker in pairs(G.jokers.cards) do
-                if joker.ability.set == 'Joker' and (not joker.ability.eternal) then
-                    table.insert(pool, joker)
+            G.E_MANAGER:add_event(Event({
+                trigger = 'after',
+                delay = 0.4,
+                func = function()
+                    SMODS.destroy_cards(target)
+                    card:juice_up(0.3, 0.5)
+                    return true
                 end
-            end
-            if #pool ~= 0 then
-                ---@type Card
-                local selected = pseudorandom_element(pool, pseudoseed("rwheel_of_fortune")) --[[@as Card]]
-                G.E_MANAGER:add_event(Event({
-                    trigger = 'after',
-                    delay = 0.4,
-                    func = function()
-                        selected:start_dissolve()
-                        card:juice_up(0.3, 0.5)
-                        return true
-                    end
-                }))
-            end
+            }))
         end
     end,
 })
