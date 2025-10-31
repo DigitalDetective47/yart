@@ -9,11 +9,11 @@
     "main_file": "main.lua",
     "badge_colour": "A782D1",
     "display_name": "YART",
-    "version": "2.0.2",
+    "version": "2.0.3",
     "priority": 1,
     "dependencies": [
         "Steamodded (>=1.0.0~BETA-0808a)",
-        "StrangeLib (>=3.4)"
+        "StrangeLib (>=3.6.2)"
     ],
     "conflicts": [
         "TagPreview"

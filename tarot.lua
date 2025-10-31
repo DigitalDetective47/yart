@@ -254,12 +254,12 @@ SMODS.Consumable({
             end
         else
             modification_list = {}
-            ---@type table<Card, true>
-            local valid_targets = StrangeLib.as_set(G.hand.cards)
+            ---@type Card[]
+            local valid_targets = SMODS.shallow_copy(G.hand.cards)
             for _ = 1, G.hand.config.card_limit - card.ability.extra do
-                local _, new_target = pseudorandom_element(valid_targets, pseudoseed("rchariot"))
+                local new_target, i = pseudorandom_element(valid_targets, pseudoseed("rchariot"))
                 table.insert(modification_list, new_target)
-                valid_targets[new_target] = nil
+                table.remove(valid_targets, i)
             end
             table.sort(modification_list, StrangeLib.ltr)
         end
@@ -296,12 +296,12 @@ SMODS.Consumable({
             end
         else
             modification_list = {}
-            ---@type table<Card, true>
-            local valid_targets = StrangeLib.as_set(G.hand.cards)
+            ---@type Card[]
+            local valid_targets = SMODS.shallow_copy(G.hand.cards)
             for _ = 1, modification_count do
-                local _, new_target = pseudorandom_element(valid_targets, pseudoseed("rchariot"))
+                local new_target, i = pseudorandom_element(valid_targets, pseudoseed("rchariot"))
                 table.insert(modification_list, new_target)
-                valid_targets[new_target] = nil
+                table.remove(valid_targets, i)
             end
             table.sort(modification_list, StrangeLib.ltr)
         end
