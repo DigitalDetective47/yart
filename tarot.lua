@@ -516,7 +516,7 @@ SMODS.Consumable({
     atlas = "rtarots",
     config = { extra = 25, factor = 1 },
     loc_vars = function(self, info_queue, card)
-        return { vars = { G.GAME.consumeable_usage_total and math.max(G.GAME.consumeable_usage_total.all * card.ability.factor, card.ability.extra) or 0, card.ability.factor, card.ability.extra } }
+        return { vars = { G.GAME.consumeable_usage_total and math.min(G.GAME.consumeable_usage_total.all * card.ability.factor, card.ability.extra) or 0, card.ability.factor, card.ability.extra } }
     end,
     can_use = StrangeLib.consumable.use_templates.always_usable,
     can_bulk_use = true,
@@ -527,7 +527,7 @@ SMODS.Consumable({
             func = function()
                 play_sound("timpani")
                 card:juice_up(0.3, 0.5)
-                ease_dollars(math.max(G.GAME.consumeable_usage_total.all * card.ability.factor, card.ability.extra), true)
+                ease_dollars(math.min((G.GAME.consumeable_usage_total.all - 1) * card.ability.factor, card.ability.extra), true)
                 return true
             end
         }))
@@ -541,7 +541,7 @@ SMODS.Consumable({
                 play_sound("timpani")
                 card:juice_up(0.3, 0.5)
                 ease_dollars(
-                    math.max(G.GAME.consumeable_usage_total.all * card.ability.factor, card.ability.extra) * number, true)
+                    math.min((G.GAME.consumeable_usage_total.all - 1) * card.ability.factor, card.ability.extra) * number, true)
                 return true
             end
         }))
