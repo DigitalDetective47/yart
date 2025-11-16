@@ -425,13 +425,12 @@ SMODS.Consumable {
         if SMODS.pseudorandom_probability(card, "rhanged_man", 1, 2, nil, true) then
             destroy = G.hand.highlighted
         else
-            destroy = SMODS.shallow_copy(G.hand.cards)
-            for _, highlighted in ipairs(G.hand.highlighted) do
-                for destroy_index, destroy_target in ipairs(destroy) do
-                    if highlighted == destroy_target then
-                        table.remove(destroy, destroy_index)
-                        break
-                    end
+            ---@type table<Card, true>
+            local highlighted = StrangeLib.as_set(G.hand.highlighted)
+            destroy = {}
+            for _, hand_card in ipairs(G.hand.cards) do
+                if not highlighted[hand_card] then
+                    table.insert(destroy, hand_card)
                 end
             end
         end
