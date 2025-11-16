@@ -12,13 +12,6 @@ SMODS.Atlas({
     py = 95,
 })
 
-local cash_out_hook = G.FUNCS.cash_out
-function G.FUNCS.cash_out(e)
-    G.GAME.yart_last_round_score = G.GAME.chips
-    G.GAME.last_cash_out = G.GAME.current_round.dollars
-    cash_out_hook(e)
-end
-
 SMODS.load_file("tarot.lua")()
 
 SMODS.Challenge({
@@ -39,3 +32,15 @@ G.E_MANAGER:add_event(Event({
 
 StrangeLib.load_compat()
 StrangeLib.update_challenge_restrictions("challenge_bans.json")
+
+SMODS.current_mod.calculate = function(self, context)
+    if context.using_consumeable then
+        if context.consumeable.ability.set ~= "Tarot" and context.consumeable.ability.set ~= "Planet" then
+            G.GAME.yart_last_other = context.consumeable.config.center_key
+        end
+    elseif context.starting_shop then
+        G.GAME.last_cash_out = G.GAME.current_round.dollars
+    elseif context.end_of_round and not context.individual and not context.repetition then
+        G.GAME.yart_last_round_score = G.GAME.chips
+    end
+end
