@@ -455,12 +455,17 @@ SMODS.Consumable {
     end,
     can_use = StrangeLib.consumable.use_templates.selection_limit,
     use = function(self, card, area)
-        ---@type Card
-        local left = G.hand.highlighted[1]
-        ---@type Card
-        local right = G.hand.highlighted[2]
-        if left.T.x > right.T.x then
-            left, right = right, left
+        ---@type Card?
+        local left = nil
+        ---@type Card?
+        local right = nil
+        for _, highlighted_card in ipairs(G.hand.highlighted) do
+            if not left or highlighted_card.T.x < left.T.x then
+                left = highlighted_card
+            end
+            if not right or highlighted_card.T.x > right.T.x then
+                right = highlighted_card
+            end
         end
         StrangeLib.consumable.tarot_animation(G.hand.highlighted, function(target)
             StrangeLib.assert(SMODS.change_base(target, left.base.suit, left.base.value))
