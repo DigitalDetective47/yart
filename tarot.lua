@@ -405,10 +405,7 @@ SMODS.Consumable {
         ---@type string
         local rank = pseudorandom_element(ranks, pseudoseed("rstrength"))
         StrangeLib.consumable.tarot_animation(G.hand.highlighted, function(target)
-            local ret, message = SMODS.change_base(target, nil, rank)
-            if not ret then
-                sendErrorMessage(message)
-            end
+            StrangeLib.assert(SMODS.change_base(target, nil, rank))
         end)
     end,
 }
@@ -466,11 +463,7 @@ SMODS.Consumable {
             left, right = right, left
         end
         StrangeLib.consumable.tarot_animation(G.hand.highlighted, function(target)
-            local ret, message = SMODS.change_base(target, left.base.suit, left.base.value)
-            if not ret then
-                sendErrorMessage(message)
-                return
-            end
+            StrangeLib.assert(SMODS.change_base(target, left.base.suit, left.base.value))
             target:set_ability(right.config.center)
             target:set_seal(right.seal, true, true)
             target:set_edition(right.edition, true, true)
