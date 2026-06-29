@@ -44,6 +44,7 @@ SMODS.Consumable {
         end })
         delay(0.6)
     end,
+    attributes = { "generation" },
 }
 
 SMODS.Consumable {
@@ -66,6 +67,7 @@ SMODS.Consumable {
             StrangeLib.consumable.nope(card, G.C.SECONDARY_SET.Tarot)
         end
     end,
+    attributes = { "chance", "enhancements", "modify_cards" },
 }
 
 SMODS.Consumable {
@@ -87,6 +89,7 @@ SMODS.Consumable {
             StrangeLib.consumable.nope(card, G.C.SECONDARY_SET.Tarot)
         end
     end,
+    attributes = { "chance", "generation", "planet", "tag" },
 }
 
 SMODS.Consumable {
@@ -117,6 +120,7 @@ SMODS.Consumable {
             target:set_ability(G.P_CENTERS.m_mult)
         end)
     end,
+    attributes = { "enhancements", "modify_card" },
 }
 
 SMODS.Consumable {
@@ -138,6 +142,7 @@ SMODS.Consumable {
             StrangeLib.consumable.nope(card, G.C.SECONDARY_SET.Tarot)
         end
     end,
+    attributes = { "chance", "generation", "tag", "tarot" },
 }
 
 SMODS.Consumable {
@@ -170,6 +175,7 @@ SMODS.Consumable {
             target:set_ability(G.P_CENTERS.m_bonus)
         end)
     end,
+    attributes = { "enhancements", "modify_card" },
 }
 
 SMODS.Consumable {
@@ -218,6 +224,7 @@ SMODS.Consumable {
             target:set_ability(G.P_CENTERS.m_wild)
         end)
     end,
+    attributes = { "enhancements", "modify_card", "suit" },
 }
 
 SMODS.Consumable {
@@ -260,6 +267,7 @@ SMODS.Consumable {
             target:set_ability(G.P_CENTERS.m_steel)
         end)
     end,
+    attributes = { "enhancements", "hand_size", "modify_card" },
 }
 
 SMODS.Consumable {
@@ -303,6 +311,7 @@ SMODS.Consumable {
             target:set_ability(G.P_CENTERS.m_glass)
         end)
     end,
+    attributes = { "enhancements", "modify_card" },
 }
 
 SMODS.Consumable {
@@ -338,6 +347,7 @@ SMODS.Consumable {
         end })
         delay(0.6)
     end,
+    attributes = { "economy" },
 }
 
 SMODS.Consumable {
@@ -382,6 +392,7 @@ SMODS.Consumable {
             end })
         end
     end,
+    attributes = { "chance", "destroy_card", "editions", "joker" },
 }
 
 SMODS.Consumable {
@@ -408,6 +419,7 @@ SMODS.Consumable {
             StrangeLib.assert(SMODS.change_base(target, nil, rank))
         end)
     end,
+    attributes = { "modify_card", "rank" },
 }
 
 SMODS.Consumable {
@@ -442,6 +454,7 @@ SMODS.Consumable {
             return true
         end })
     end,
+    attributes = { "destroy_card" },
 }
 
 SMODS.Consumable {
@@ -474,6 +487,7 @@ SMODS.Consumable {
             target:set_edition(right.edition, true, true)
         end)
     end,
+    attributes = { "editions", "enhancements", "modify_card", "rank", "seals", "suit" },
 }
 
 SMODS.Consumable {
@@ -508,6 +522,7 @@ SMODS.Consumable {
         end })
         delay(0.6)
     end,
+    attributes = { "economy" },
 }
 
 SMODS.Consumable {
@@ -547,6 +562,7 @@ SMODS.Consumable {
             target:set_ability(G.P_CENTERS.m_gold)
         end)
     end,
+    attributes = { "economy", "enhancements", "full_deck", "modify_card" },
 }
 
 SMODS.Consumable {
@@ -577,6 +593,7 @@ SMODS.Consumable {
             target:set_ability(G.P_CENTERS.m_stone)
         end)
     end,
+    attributes = { "enhancements", "modify_card" },
 }
 
 SMODS.Consumable {
@@ -612,6 +629,7 @@ SMODS.Consumable {
             target:set_ability(G.P_CENTERS.m_gold)
         end)
     end,
+    attributes = { "diamonds", "enhancements", "modify_card", "suit" },
 }
 
 SMODS.Consumable {
@@ -647,6 +665,7 @@ SMODS.Consumable {
             target:set_ability(G.P_CENTERS.m_mult)
         end)
     end,
+    attributes = { "clubs", "enhancements", "modify_card", "suit" },
 }
 
 SMODS.Consumable {
@@ -682,6 +701,7 @@ SMODS.Consumable {
             target:set_ability(G.P_CENTERS.m_glass)
         end)
     end,
+    attributes = { "enhancements", "hearts", "modify_card", "suit" },
 }
 
 SMODS.Consumable {
@@ -703,6 +723,7 @@ SMODS.Consumable {
             StrangeLib.consumable.nope(card, G.C.SECONDARY_SET.Tarot)
         end
     end,
+    attributes = { "chance", "generation", "joker", "tag" },
 }
 
 SMODS.Consumable {
@@ -738,4 +759,5 @@ SMODS.Consumable {
             target:set_ability(G.P_CENTERS.m_bonus)
         end)
     end,
+    attributes = { "enhancements", "modify_card", "spades", "suit" },
 }

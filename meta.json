@@ -10,10 +10,10 @@
     "badge_colour": "A782D1",
     "display_name": "YART",
     "icon_path": "icon.png",
-    "version": "2.0.6",
+    "version": "2.0.7",
     "priority": 1,
     "dependencies": [
-        "Steamodded (>=1.0.0~BETA-1530d)",
+        "Steamodded (>=1.0.0~BETA-1818a)",
         "StrangeLib (>=3.7)"
     ],
     "conflicts": [
