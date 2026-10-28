@@ -1,0 +1,10 @@
+{
+    "name": "Yet_Another_Reversed_Tarot_mod",
+    "description": "A Balatro mod that adds reversed tarot cards to the game",
+    "version_number": "2.0.8",
+    "dependencies": [
+        "Steamodded-Steamodded-26.829.0",
+        "DigitalDetective47-Strange_Library-4.2.2"
+    ],
+    "website_url": "https://github.com/DigitalDetective47/yart"
+}

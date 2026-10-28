@@ -1,0 +1,1 @@
+Yet Another Reversed Tarot mod introduces reversed variants of all 22 tarot cards. Their effects are similar to their non&hyphen;reversed variants, but with extra conditions for a more powerful effect! Also includes a new challenge where only the reversed variants are present.
